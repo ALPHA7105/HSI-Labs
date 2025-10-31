@@ -20,40 +20,11 @@
             border: 1px solid #30363d; /* Subtle border */
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -2px rgba(0, 0, 0, 0.15);
         }
-        .btn-primary {
-            background-color: #a78bfa; /* Vibrant Violet primary color */
-            color: #0d1117;
-            font-weight: 700;
-            transition: background-color 0.2s, transform 0.1s;
-        }
-        .btn-primary:hover {
-            background-color: #8b5cf6;
-            transform: translateY(-1px);
-        }
+        /* Styles for the "Learn" tab content (no longer a tab) */
         .tab-active {
             border-bottom: 3px solid #a78bfa;
             color: #a78bfa;
             font-weight: 700;
-        }
-        .stream-toggle-active {
-            background-color: #a78bfa !important;
-            color: #0d1117 !important;
-            box-shadow: 0 2px 4px rgba(167, 139, 250, 0.4);
-        }
-        .post-list {
-            max-height: calc(100vh - 200px); /* Limit height for feed */
-            overflow-y: auto;
-        }
-        /* Custom scrollbar for better dark mode aesthetics */
-        .post-list::-webkit-scrollbar {
-            width: 8px;
-        }
-        .post-list::-webkit-scrollbar-track {
-            background: #161b22;
-        }
-        .post-list::-webkit-scrollbar-thumb {
-            background: #475569;
-            border-radius: 4px;
         }
         .lesson-summary {
             color: #2dd4bf; /* Teal highlight color */
@@ -73,37 +44,19 @@
 </head>
 <body class="min-h-screen">
 
-    <div id="loading" class="fixed inset-0 bg-[#0d1117] flex items-center justify-center z-50">
-        <div class="text-xl font-semibold flex items-center space-x-3">
-            <svg class="animate-spin h-5 w-5 text-violet-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-            <span>Connecting to the Universe of Data...</span>
-        </div>
-    </div>
-
     <!-- Header & Navigation -->
     <header class="sticky top-0 z-20 bg-[#161b22] border-b border-[#30363d] shadow-lg">
         <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
             <h1 class="text-3xl font-extrabold text-[#a78bfa] tracking-wider">
                 ✨ HSI Labs ✨
             </h1>
-            <div class="flex items-center space-x-4">
-                <div class="text-sm">
-                    <span class="hidden sm:inline">Session ID:</span> <span id="user-id" class="font-mono text-xs text-teal-400 bg-[#21262d] p-1 rounded">...</span>
-                </div>
-            </div>
         </div>
         
-        <!-- Navigation Tabs -->
+        <!-- Navigation Tabs (Only "The Lab" remains) -->
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex space-x-6">
-            <button onclick="switchTab('learn')" id="tab-learn" class="py-2 text-lg transition duration-200 tab-active">
+            <div class="py-2 text-lg tab-active">
                 The Lab (Learn Fun Topics)
-            </button>
-            <button onclick="switchTab('stream')" id="tab-stream" class="py-2 text-lg text-gray-400 transition duration-200 hover:text-white">
-                Knowledge Stream (Share Your Ideas)
-            </button>
+            </div>
         </nav>
     </header>
 
@@ -111,10 +64,10 @@
     <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         
         <!-- Tab Content Container -->
-        <div id="tab-content">
+        <div>
             
             <!-- 1. LEARN TAB CONTENT (The Lab) - 20 FUN TOPICS -->
-            <div id="content-learn" class="space-y-6">
+            <div class="space-y-6">
                 <h2 class="text-3xl font-bold mb-6 text-violet-400">The Lab: Foundations of Science and Philosophy (5th Grade Level)</h2>
                 <p class="text-gray-400 max-w-4xl">Dive into awesome topics! We'll explore big scientific facts and the cool philosophical questions that come with them. Think like a scientist and a philosopher at the same time!</p>
                 
@@ -334,7 +287,7 @@
                                     **Philosophy Idea:** This is pure **Causality**. Every event has a specific cause. It helps us predict the future by understanding the past.
                                 </p>
                                 <p class="text-gray-400">
-                                    **C++ Connection:** **Sequential Code Execution**. Computers run instructions one after the other, like a line of dominos. One line of code causes the next line to run.
+                                    **C++ Connection:** **Sequential Code Execution**. Computers run instructions one after the aether, like a line of dominos. One line of code causes the next line to run.
                                 </p>
                             </div>
                         </details>
@@ -522,388 +475,11 @@
 
                 </div>
             </div>
-
-            <!-- 2. STREAM TAB CONTENT (Contribute) -->
-            <div id="content-stream" class="hidden">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    
-                    <!-- Left Column: Upload Form (Sticky/Modal behavior on mobile) -->
-                    <div class="lg:col-span-1">
-                        <div class="container-card p-6 rounded-xl shadow-2xl sticky top-20">
-                            <h2 class="text-2xl font-bold mb-4 border-b border-[#30363d] pb-2 text-violet-400">
-                                Share Your Insight
-                            </h2>
-                            <form id="post-form" onsubmit="handleUpload(event)">
-                                <div class="mb-4">
-                                    <label for="post-title" class="block text-sm font-medium mb-1">Title (Concept/Question):</label>
-                                    <input type="text" id="post-title" required maxlength="100"
-                                        class="w-full p-2 rounded-lg bg-[#0d1117] border border-[#30363d] focus:border-[#a78bfa] focus:ring-1 focus:ring-[#a78bfa] text-white">
-                                </div>
-                                <div class="mb-4">
-                                    <label for="post-url" class="block text-sm font-medium mb-1">Source URL (Optional):</label>
-                                    <input type="url" id="post-url" placeholder="https://example.com/source-article"
-                                        class="w-full p-2 rounded-lg bg-[#0d1117] border border-[#30363d] focus:border-[#a78bfa] focus:ring-1 focus:ring-[#a78bfa] text-white">
-                                </div>
-                                <div class="mb-4">
-                                    <label for="post-content" class="block text-sm font-medium mb-1">Insight (Connect Science & Philosophy):</label>
-                                    <textarea id="post-content" required rows="6" maxlength="5000"
-                                        class="w-full p-2 rounded-lg bg-[#0d1117] border border-[#30363d] focus:border-[#a78bfa] focus:ring-1 focus:ring-[#a78bfa] text-white"></textarea>
-                                    <p class="text-xs text-right text-gray-400">Max 5000 characters.</p>
-                                </div>
-                                <button type="submit" id="submit-btn" class="btn-primary w-full py-2 rounded-lg font-bold">
-                                    Submit Insight
-                                </button>
-                            </form>
-                            <div id="message-box" class="mt-4 p-3 rounded-lg text-sm hidden"></div>
-                        </div>
-                    </div>
-
-                    <!-- Right Column: Content Feed -->
-                    <div class="lg:col-span-2">
-                        
-                        <!-- Filter Buttons -->
-                        <div class="flex space-x-4 mb-6">
-                            <button id="view-all" onclick="switchStreamView('all')" class="py-2 px-4 rounded-full text-sm font-semibold border border-[#a78bfa] bg-[#a78bfa] text-[#0d1117] transition stream-toggle-active">
-                                All Knowledge
-                            </button>
-                            <button id="view-mine" onclick="switchStreamView('mine')" class="py-2 px-4 rounded-full text-sm font-semibold border border-teal-400 text-teal-400 hover:bg-[#21262d] transition">
-                                My Uploads
-                            </button>
-                        </div>
-                        
-                        <h2 id="stream-title" class="text-3xl font-bold mb-6 text-gray-200">
-                            Knowledge Stream (All)
-                        </h2>
-                        <div id="posts-container" class="space-y-6 post-list">
-                            <!-- Posts will be dynamically inserted here -->
-                        </div>
-                        <p id="no-posts-message" class="text-gray-500 text-center mt-10 hidden">
-                            The knowledge stream is empty. Be the first to share an insight!
-                        </p>
-                    </div>
-                </div>
-            </div>
             
         </div>
 
     </main>
-    
-    <!-- Firebase Imports and Script -->
-    <script type="module">
-        // Import Firebase functions
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, onSnapshot, query, addDoc, serverTimestamp, setLogLevel, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // 1. GLOBALS & INIT
-        let app;
-        let db;
-        let auth;
-        let userId = 'anonymous';
-        let unsubscribePosts = () => {}; // Function to stop the current Firestore listener
-        let currentStreamView = 'all'; // State for which filter is active: 'all' or 'mine'
-
-        // Essential global variables provided by the environment
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-
-        const POSTS_COLLECTION = `artifacts/${appId}/public/data/hsi_posts`;
-
-        setLogLevel('Debug'); // Enable debug logging for Firestore
-
-        document.addEventListener('DOMContentLoaded', initFirebase);
-
-        /**
-         * Switches the active content tab (Learn or Stream).
-         * @param {string} target - 'learn' or 'stream'.
-         */
-        window.switchTab = function(target) {
-            document.getElementById('content-learn').classList.add('hidden');
-            document.getElementById('content-stream').classList.add('hidden');
-            
-            // Reset tab styles
-            document.getElementById('tab-learn').classList.remove('tab-active', 'text-gray-400', 'hover:text-white');
-            document.getElementById('tab-stream').classList.remove('tab-active', 'text-gray-400', 'hover:text-white');
-            document.getElementById('tab-learn').classList.add('text-gray-400', 'hover:text-white');
-            document.getElementById('tab-stream').classList.add('text-gray-400', 'hover:text-white');
-
-            // Apply active styles
-            document.getElementById(`content-${target}`).classList.remove('hidden');
-            document.getElementById(`tab-${target}`).classList.add('tab-active');
-            document.getElementById(`tab-${target}`).classList.remove('text-gray-400', 'hover:text-white');
-            
-            // If switching to the stream tab, ensure the listener is active
-            if (target === 'stream' && db) {
-                // Force a refresh of the listener to start the default view
-                switchStreamView(currentStreamView);
-            }
-        }
-
-
-        /**
-         * Initializes Firebase and handles user authentication.
-         */
-        async function initFirebase() {
-            try {
-                if (Object.keys(firebaseConfig).length === 0) {
-                    throw new Error("Firebase configuration not found.");
-                }
-                
-                app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
-                auth = getAuth(app);
-
-                // Authenticate the user
-                onAuthStateChanged(auth, async (user) => {
-                    if (!user) {
-                        try {
-                            if (initialAuthToken) {
-                                await signInWithCustomToken(auth, initialAuthToken);
-                            } else {
-                                await signInAnonymously(auth);
-                            }
-                        } catch (error) {
-                            console.error("Firebase Auth Error:", error);
-                        }
-                    }
-                    
-                    // Once authenticated (or signed in anonymously), set the userId
-                    userId = auth.currentUser?.uid || crypto.randomUUID();
-                    const userIdElement = document.getElementById('user-id');
-                    if (userIdElement) {
-                        userIdElement.textContent = userId.substring(0, 8) + '...';
-                    }
-                    
-                    // Start listening for posts with the default 'all' view
-                    if (db) {
-                        switchStreamView('all');
-                    }
-
-                    document.getElementById('loading').classList.add('hidden');
-                });
-
-            } catch (error) {
-                console.error("Initialization Error:", error);
-                document.getElementById('loading').innerHTML = `<p class="text-red-500">Error initializing Firebase: ${error.message}</p>`;
-            }
-        }
-
-        // 2. DATA LISTENING (READ)
-
-        /**
-         * Switches the active view filter for the Knowledge Stream.
-         * @param {string} view - 'all' or 'mine'.
-         */
-        window.switchStreamView = function(view) {
-            if (view === currentStreamView && unsubscribePosts !== null) {
-                // If view is the same and a listener is already active, do nothing
-                return;
-            }
-
-            currentStreamView = view;
-            
-            // Update UI elements
-            const titleElement = document.getElementById('stream-title');
-            const allBtn = document.getElementById('view-all');
-            const mineBtn = document.getElementById('view-mine');
-
-            allBtn.classList.remove('stream-toggle-active', 'border-teal-400', 'text-teal-400', 'hover:bg-[#21262d]');
-            mineBtn.classList.remove('stream-toggle-active', 'border-teal-400', 'text-teal-400', 'hover:bg-[#21262d]');
-            
-            if (view === 'mine') {
-                titleElement.textContent = 'Knowledge Stream (My Uploads)';
-                allBtn.classList.add('border-teal-400', 'text-teal-400', 'hover:bg-[#21262d]');
-                mineBtn.classList.add('stream-toggle-active');
-            } else { // 'all'
-                titleElement.textContent = 'Knowledge Stream (All)';
-                mineBtn.classList.add('border-teal-400', 'text-teal-400', 'hover:bg-[#21262d]');
-                allBtn.classList.add('stream-toggle-active');
-            }
-            
-            listenForPosts();
-        }
-
-        /**
-         * Sets up a real-time listener for posts in Firestore based on the currentStreamView.
-         */
-        function listenForPosts() {
-            // 1. Unsubscribe from the old listener if one exists
-            unsubscribePosts(); 
-            
-            const postsRef = collection(db, POSTS_COLLECTION);
-            let postsQuery;
-
-            // 2. Determine the query based on the current view
-            if (currentStreamView === 'mine') {
-                // Query for posts uploaded by the current user
-                postsQuery = query(postsRef, where('authorId', '==', userId));
-            } else {
-                // Query for all posts (no filter)
-                postsQuery = query(postsRef); 
-            }
-
-            // 3. Set up the new real-time listener and store its unsubscribe function
-            unsubscribePosts = onSnapshot(postsQuery, (snapshot) => {
-                const posts = [];
-                
-                snapshot.forEach(doc => {
-                    const data = doc.data();
-                    posts.push({ id: doc.id, ...data });
-                });
-
-                // Sort the posts by timestamp (newest first)
-                posts.sort((a, b) => {
-                    const timeA = a.timestamp?.seconds || 0;
-                    const timeB = b.timestamp?.seconds || 0;
-                    return timeB - timeA;
-                });
-
-                renderPosts(posts);
-
-            }, (error) => {
-                console.error("Error listening for real-time updates:", error);
-                showMessage("Failed to load posts in real-time.", 'bg-red-900 text-red-300');
-            });
-        }
-
-        /**
-         * Renders the list of posts to the DOM.
-         * @param {Array<Object>} posts - The list of posts to render.
-         */
-        function renderPosts(posts) {
-            const container = document.getElementById('posts-container');
-            container.innerHTML = ''; // Clear existing posts
-            
-            const noPostsMessage = document.getElementById('no-posts-message');
-
-            if (posts.length === 0) {
-                noPostsMessage.textContent = currentStreamView === 'mine' 
-                    ? 'You have not uploaded any insights yet. Share your first one above!'
-                    : 'The knowledge stream is empty. Be the first to share an insight!';
-                noPostsMessage.classList.remove('hidden');
-                return;
-            }
-            noPostsMessage.classList.add('hidden');
-
-
-            posts.forEach(post => {
-                const postElement = document.createElement('div');
-                postElement.className = 'container-card p-6 rounded-xl shadow-xl transition transform hover:scale-[1.01] duration-300';
-                
-                // Format date safely
-                let dateString = 'Just now';
-                if (post.timestamp && post.timestamp.toDate) {
-                    try {
-                        dateString = post.timestamp.toDate().toLocaleString();
-                    } catch {
-                        // Keep 'Just now' if date conversion fails
-                    }
-                }
-                
-                // Use a default ID if needed for rendering
-                const displayId = post.authorId ? post.authorId.substring(0, 8) + '...' : 'Unknown';
-
-                let urlSection = '';
-                if (post.url && post.url.startsWith('http')) {
-                    const displayUrl = post.url.length > 50 ? post.url.substring(0, 50) + '...' : post.url;
-                    urlSection = `
-                        <p class="mt-2 text-xs text-violet-400">
-                            Source: <a href="${post.url}" target="_blank" rel="noopener noreferrer" class="hover:underline font-mono">${displayUrl}</a>
-                        </p>
-                    `;
-                }
-                
-                postElement.innerHTML = `
-                    <h3 class="text-2xl font-bold text-teal-300 mb-2">${post.title}</h3>
-                    <div class="text-xs text-gray-500 mb-4 border-b border-[#30363d] pb-2">
-                        Posted by <span class="font-mono text-teal-400">${displayId}</span> on ${dateString}
-                    </div>
-                    <p class="whitespace-pre-wrap text-base leading-relaxed text-gray-300">${post.content}</p>
-                    ${urlSection}
-                `;
-                container.appendChild(postElement);
-            });
-        }
-
-        // 3. DATA WRITING (CREATE)
-
-        /**
-         * Handles the form submission to upload a new post.
-         * @param {Event} event - The form submission event.
-         */
-        window.handleUpload = async function(event) {
-            event.preventDefault();
-            
-            const titleInput = document.getElementById('post-title');
-            const contentInput = document.getElementById('post-content');
-            const urlInput = document.getElementById('post-url');
-            const submitBtn = document.getElementById('submit-btn');
-            const messageBox = document.getElementById('message-box');
-
-            const title = titleInput.value.trim();
-            const content = contentInput.value.trim();
-            const url = urlInput.value.trim();
-
-            if (!title || !content) {
-                showMessage('Title and Insight fields are required.', 'bg-yellow-900 text-yellow-300');
-                return;
-            }
-            
-            // Disable button and show loading state
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Submitting...';
-            messageBox.classList.add('hidden');
-
-            try {
-                if (!db) {
-                    throw new Error("Database not initialized.");
-                }
-
-                const newPost = {
-                    title: title,
-                    content: content,
-                    url: url, // Added the URL field
-                    authorId: userId,
-                    timestamp: serverTimestamp() 
-                };
-
-                await addDoc(collection(db, POSTS_COLLECTION), newPost);
-
-                showMessage('Insight successfully shared!', 'bg-green-900 text-green-300');
-                
-                // Clear the form inputs
-                titleInput.value = '';
-                contentInput.value = '';
-                urlInput.value = '';
-                
-            } catch (error) {
-                console.error("Error adding document:", error);
-                showMessage(`Error sharing insight: ${error.message}`, 'bg-red-900 text-red-300');
-            } finally {
-                // Re-enable button and reset text
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Submit Insight';
-            }
-        }
-
-        /**
-         * Utility function to display a temporary message.
-         * @param {string} text - The message text.
-         * @param {string} className - Tailwind classes for styling (e.g., color).
-         */
-        function showMessage(text, className) {
-            const messageBox = document.getElementById('message-box');
-            messageBox.innerText = text;
-            messageBox.className = `mt-4 p-3 rounded-lg text-sm ${className}`;
-            messageBox.classList.remove('hidden');
-            
-            // Auto-hide the message after a few seconds
-            setTimeout(() => {
-                messageBox.classList.add('hidden');
-            }, 5000);
-        }
-        
-    </script>
 </body>
 </html>
+
