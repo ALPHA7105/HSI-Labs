@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HSI Labs: The Intersection of Science & Philosophy</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for a fun, electric dark mode theme */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d1117; /* Deep Charcoal/Dark Mode Background */
+            color: #e2e8f0; /* Light text */
+        }
+        .container-card {
+            background-color: #161b22; /* Slightly lighter card background */
+            border: 1px solid #30363d; /* Subtle border */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -2px rgba(0, 0, 0, 0.15);
+        }
+        .btn-primary {
+            background-color: #a78bfa; /* Vibrant Violet primary color */
+            color: #0d1117;
+            font-weight: 700;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        .btn-primary:hover {
+            background-color: #8b5cf6;
+            transform: translateY(-1px);
+        }
+        .tab-active {
+            border-bottom: 3px solid #a78bfa;
+            color: #a78bfa;
+            font-weight: 700;
+        }
+        .stream-toggle-active {
+            background-color: #a78bfa !important;
+            color: #0d1117 !important;
+            box-shadow: 0 2px 4px rgba(167, 139, 250, 0.4);
+        }
+        .post-list {
+            max-height: calc(100vh - 200px); /* Limit height for feed */
+            overflow-y: auto;
+        }
+        /* Custom scrollbar for better dark mode aesthetics */
+        .post-list::-webkit-scrollbar {
+            width: 8px;
+        }
+        .post-list::-webkit-scrollbar-track {
+            background: #161b22;
+        }
+        .post-list::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 4px;
+        }
+        .lesson-summary {
+            color: #2dd4bf; /* Teal highlight color */
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 0;
+        }
+        .lesson-summary:hover {
+            color: #14b8a6;
+        }
+        .lesson-icon {
+            font-size: 1.5rem;
+            margin-right: 0.75rem;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <div id="loading" class="fixed inset-0 bg-[#0d1117] flex items-center justify-center z-50">
+        <div class="text-xl font-semibold flex items-center space-x-3">
+            <svg class="animate-spin h-5 w-5 text-violet-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span>Connecting to the Universe of Data...</span>
+        </div>
+    </div>
+
+    <!-- Header & Navigation -->
+    <header class="sticky top-0 z-20 bg-[#161b22] border-b border-[#30363d] shadow-lg">
+        <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+            <h1 class="text-3xl font-extrabold text-[#a78bfa] tracking-wider">
+                ✨ HSI Labs ✨
+            </h1>
+            <div class="flex items-center space-x-4">
+                <div class="text-sm">
+                    <span class="hidden sm:inline">Session ID:</span> <span id="user-id" class="font-mono text-xs text-teal-400 bg-[#21262d] p-1 rounded">...</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Navigation Tabs -->
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex space-x-6">
+            <button onclick="switchTab('learn')" id="tab-learn" class="py-2 text-lg transition duration-200 tab-active">
+                The Lab (Learn Fun Topics)
+            </button>
+            <button onclick="switchTab('stream')" id="tab-stream" class="py-2 text-lg text-gray-400 transition duration-200 hover:text-white">
+                Knowledge Stream (Share Your Ideas)
+            </button>
+        </nav>
+    </header>
+
+    <!-- Main Content Layout -->
+    <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+        
+        <!-- Tab Content Container -->
+        <div id="tab-content">
+            
+            <!-- 1. LEARN TAB CONTENT (The Lab) - 20 FUN TOPICS -->
+            <div id="content-learn" class="space-y-6">
+                <h2 class="text-3xl font-bold mb-6 text-violet-400">The Lab: Foundations of Science and Philosophy (5th Grade Level)</h2>
+                <p class="text-gray-400 max-w-4xl">Dive into awesome topics! We'll explore big scientific facts and the cool philosophical questions that come with them. Think like a scientist and a philosopher at the same time!</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                    <!-- TOPIC 1 -->
+                    <div class="container-card p-4 rounded-xl shadow-xl">
+                        <details>
+                            <summary class="lesson-summary cursor-pointer">
+                                <span class="lesson-icon">🌕</span> 1. Why the Moon Doesn't Fall (Inertia)
+                            </summary>
+                            <div class="mt-2 pt-2 border-t border-[#30363d] text-sm space-y-2">
+                                <p class="text-gray-300">
+                                    **Science Idea:** The Moon always tries to fly straight, but Earth's **Gravity** keeps pulling it sideways. It's always falling *around* us!
+                                </p>
+                                <p class="text-gray-300">
+                                    **Philosophy Idea:** This is about **Cause and Effect**. The cause (gravity) has a predictable effect (orbit). Everything happens for a reason.
+                                </p>
+                                <p class="text-gray-400">
+                                    **C++ Connection:** **Constants (`const`)**. Once we set Earth's gravity or the Moon's speed, it doesn't change! Computer code uses `const` to keep values predictable.
+                                </p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- TOPIC 2 -->
+                    <div class="container-card p-4 rounded-xl shadow-xl">
+                        <details>
+                            <summary class="lesson-summary cursor-pointer">
+                                <span class="lesson-icon">🌌</span> 2. The Mystery of Nothing (Vacuum Energy)
+                            </summary>
+                            <div class="mt-2 pt-2 border-t border-[#30363d] text-sm space-y-2">
+                                <p class="text-gray-300">
+                                    **Science Idea:** Even empty space (a **vacuum**) isn't totally empty! Tiny energy bubbles pop in and out of existence all the time.
+                                </p>
+                                <p class="text-gray-300">
+                                    **Philosophy Idea:** This asks: Can something come from **Nothing**? It challenges the idea that a truly empty space is possible.
+                                </p>
+                                <p class="text-gray-400">
+                                    **C++ Connection:** **Null Pointers**. This is like trying to point to something that isn't there (like a blank space), but the computer still needs to check if it's truly empty.
+                                </p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- TOPIC 3 -->
+                    <div class="container-card p-4 rounded-xl shadow-xl">
+                        <details>
+                            <summary class="lesson-summary cursor-pointer">
+                                <span class="lesson-icon">🔬</span> 3. What is a 'Fact'? (Testing Ideas)
+                            </summary>
+                            <div class="mt-2 pt-2 border-t border-[#30363d] text-sm space-y-2">
+                                <p class="text-gray-300">
+                                    **Science Idea:** A scientific **fact** is an idea tested many times by many people. If it keeps passing, we call it a fact!
+                                </p>
+                                <p class="text-gray-300">
+                                    **Philosophy Idea:** This is **Empiricism** (knowledge comes from senses) and **Evidence**. We only believe things we can check ourselves.
+                                </p>
+                                <p class="text-gray-400">
+                                    **C++ Connection:** **Boolean Logic (`true`/`false`)**. A computer can only decide if a statement is definitely true or definitely false, just like testing a fact.
+                                </p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- TOPIC 4 -->
+                    <div class="container-card p-4 rounded-xl shadow-xl">
+                        <details>
+                            <summary class="lesson-summary cursor-pointer">
+                                <span class="lesson-icon">🤖</span> 4. Can Robots Have Feelings?
+                            </summary>
+                            <div class="mt-2 pt-2 border-t border-[#30363d] text-sm space-y-2">
+                                <p class="text-gray-300">
+                                    **Science Idea:** Computers are great at copying feelings (like smiling), but they don't have the hormones and biology that cause *real* emotions.
+                                </p>
+                                <p class="text-gray-300">
+                                    **Philosophy Idea:** This is the **Mind-Body Problem**. Where do our feelings (mind) come from, and how are they connected to our body?
+                                </p>
+                                <p class="text-gray-400">
+                                    **C++ Connection:** **Functions**. A function takes input (like seeing a friend) and runs code to produce an output (like saying "hello"). But it doesn't *feel* happy doing it.
+                                </p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- TOPIC 5 -->
+                    <div class="container-card p-4 rounded-xl shadow-xl">
+                        <details>
+                            <summary class="lesson-summary cursor-pointer">
+                                <span class="lesson-icon">📚</span> 5. The Infinite Library (Possibility)
+                            </summary>
+                            <div class="mt-2 pt-2 border-t border-[#30363d] text-sm space-y-2">
+                                <p class="text-gray-300">
+                                    **Science Idea:** The universe might be **infinite**, meaning it never ends. If it never ends, every possibility exists somewhere!
+                                </p>
+                                <p class="text-gray-300">
+                                    **Philosophy Idea:** This is the concept of **Infinity**. It's a number that is bigger than any number you can think of. It's mind-bending!
+                                </p>
+                                <p class="text-gray-400">
+                                    **C++ Connection:** **Memory Pointers**. A pointer is like a road sign to data. If we had infinite memory, we could use pointers to remember every single piece of information possible.
+                                </p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- TOPIC 6 -->
+                    <div class="container-card p-4 rounded-xl shadow-xl">
+                        <details>
+                            <summary class="lesson-summary cursor-pointer">
+                                <span class="lesson-icon">⚖️</span> 6. Why are there Rules for Everything?
+                            </summary>
+                            <div class="mt-2 pt-2 border-t border-[#30363d] text-sm space-y-2">
+                                <p class="text-gray-300">
+                                    **Science Idea:** The laws of physics are like rules that the universe *must* follow. They keep planets spinning and light moving.
+                                </p>
+                                <p class="text-gray-300">
+                                    **Philosophy Idea:** This relates to **Ethics** and **Justice**. Rules make life fair and predictable, whether in the universe or on the playground.
+                                </p>
+                                <p class="text-gray-400">
+                                    **C++ Connection:** **`if/else` Statements**. These are the rules of programming! The computer checks a condition and follows one path (`if`) or a different path (`else`).
+                                </p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- TOPIC 7 -->
+                    <div class="container-card p-4 rounded-xl shadow-xl">
+                        <details>
+                            <summary class="lesson-summary cursor-pointer">
+                                <span class="lesson-icon">📦</span> 7. Sorting the World (Categories)
+                            </summary>
+                            <div class="mt-2 pt-2 border-t border-[#30363d] text-sm space-y-2">
+                                <p class="text-gray-300">
+                                    **Science Idea:** We sort plants and animals into categories like mammal, fish, and bird.
+                                </p>
+                                <p class="text-gray-300">
+                                    **Philosophy Idea:** This is **Metaphysics**. It's about how we define what things *are*. When we sort, we create groups based on core ideas.
+                                </p>
+                                <p class="text-gray-400">
+                                    **C++ Connection:** **Arrays and Vectors**. These are lists used to hold a collection of things that are all the same type (like a list of numbers or a list of words).
+                                </p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- TOPIC 8 -->
+                    <div class="container-card p-4 rounded-xl shadow-xl">
+                        <details>
+                            <summary class="lesson-summary cursor-pointer">
+                                <span class="lesson-icon">⏱️</span> 8. The Arrow of Time (No Going Back)
+                            </summary>
+                            <div class="mt-2 pt-2 border-t border-[#30363d] text-sm space-y-2">
+                                <p class="text-gray-300">
+                                    **Science Idea:** Time only moves one way, forward. This is often linked to **Entropy** (things always break down or get messier).
+                                </p>
+                                <p class="text-gray-300">
+                                    **Philosophy Idea:** This relates to **Determinism**. Does every moment happen because of the moment before it? Can we ever truly change the past?
+                                </p>
+                                <p class="text-gray-400">
+                                    **C++ Connection:** **Sequence of Operations**. A computer runs code line-by-line. It must finish line 1 before it can start line 2, and it can never go back and change line 1 after it's run.
+                                </p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- TOPIC 9 -->
+                    <div class="container-card p-4 rounded-xl shadow-xl">
+                        <details>
+                            <summary class="lesson-summary cursor-pointer">
+                                <span class="lesson-icon">⭐</span> 9. What Makes a Hero 'Good'?
+                            </summary>
+                            <div class="mt-2 pt-2 border-t border-[#30363d] text-sm space-y-2">
+                                <p class="text-gray-300">
+                                    **Science Idea:** Psychologists study why people choose to help others or choose to be selfish.
+                                </p>
+                                <p class="text-gray-300">
+                                    **Philosophy Idea:** This is **Virtue Ethics**. It asks, "What kind of person should I be?" A hero is a person who has good *character* (like honesty and bravery).
+                                </p>
+                                <p class="text-gray-400">
+                                    **C++ Connection:** **Object-Oriented Design (Classes)**. A class bundles information and actions together. A `Hero` class has attributes (like strength) and methods (like `fightEvil()`).
+                                </p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- TOPIC 10 -->
+                    <div class="container-card p-4 rounded-xl shadow-xl">
+                        <details>
+                            <summary class="lesson-summary cursor-pointer">
+                                <span class="lesson-icon">✨</span> 10. The Many Worlds of Quantum Physics
+                            </summary>
+                            <div class="mt-2 pt-2 border-t border-[#30363d] text-sm space-y-2">
+                                <p class="text-gray-300">
+                                    **Science Idea:** Some scientists think that every time something *could* happen, it *does* happen in a different parallel universe.
+                                </p>
+                                <p class="text-gray-300">
+                                    **Philosophy Idea:** This relates to **Possibility**. If all possibilities happen, how special is our one world?
+                                </p>
+                                <p class="text-gray-400">
+                                    **C++ Connection:** **Threading/Parallel Processing**. This is when a computer runs many pieces of code at the *exact same time*. It’s like running many small programs in parallel worlds.
+                                </p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- TOPIC 11 -->
+                    <div class="container-card p-4 rounded-xl shadow-xl">
+                        <details>
+                            <summary class="lesson-summary cursor-pointer">
+                                <span class="lesson-icon">💥</span> 11. The Domino Effect (Cause and Chain)
+                            </summary>
+                            <div class="mt-2 pt-2 border-t border-[#30363d] text-sm space-y-2">
+                                <p class="text-gray-300">
+                                    **Science Idea:** When one thing happens (cause), it sets off a chain reaction that makes another thing happen (effect).
+                                </p>
+                                <p class="text-gray-300">
+                                    **Philosophy Idea:** This is pure **Causality**. Every event has a specific cause. It helps us predict the future by understanding the past.
+                                </p>
+                                <p class="text-gray-400">
+                                    **C++ Connection:** **Sequential Code Execution**. Computers run instructions one after the other, like a line of dominos. One line of code causes the next line to run.
+                                </p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- TOPIC 12 -->
+                    <div class="container-card p-4 rounded-xl shadow-xl">
+                        <details>
+                            <summary class="lesson-summary cursor-pointer">
+                                <span class="lesson-icon">🌲</span> 12. If a Tree Falls (Observation)
+                            </summary>
+                            <div class="mt-2 pt-2 border-t border-[#30363d] text-sm space-y-2">
+                                <p class="text-gray-300">
+                                    **Science Idea:** For us to hear sound, air vibrations must reach an ear. If no ear is there, the vibrations still happen, but is there *sound*?
+                                </p>
+                                <p class="text-gray-300">
+                                    **Philosophy Idea:** This is about **Perception**. Does something exist if no one is there to see, hear, or feel it? How does our mind create reality?
+                                </p>
+                                <p class="text-gray-400">
+                                    **C++ Connection:** **Input/Output Streams**. The computer only "knows" something if it gets an **Input** (like a button press). If there's no input, it just runs its own code.
+                                </p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- TOPIC 13 -->
+                    <div class="container-card p-4 rounded-xl shadow-xl">
+                        <details>
+                            <summary class="lesson-summary cursor-pointer">
+                                <span class="lesson-icon">❓</span> 13. The Problem of Too Many Choices
+                            </summary>
+                            <div class="mt-2 pt-2 border-t border-[#30363d] text-sm space-y-2">
+                                <p class="text-gray-300">
+                                    **Science Idea:** When we have too many options (like 50 types of cereal), our brain can get overwhelmed and have a hard time choosing.
+                                </p>
+                                <p class="text-gray-300">
+                                    **Philosophy Idea:** This is about **Free Will**. If you have infinite choices, how do you decide which one is the *best*? And how do you know if your choice was truly 'free'?
+                                </p>
+                                <p class="text-gray-400">
+                                    **C++ Connection:** **Switch Statements**. This lets a computer easily handle many choices (Case 1, Case 2, Case 3, etc.) and only execute the code for the one choice you pick.
+                                </p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- TOPIC 14 -->
+                    <div class="container-card p-4 rounded-xl shadow-xl">
+                        <details>
+                            <summary class="lesson-summary cursor-pointer">
+                                <span class="lesson-icon">0️⃣</span> 14. Is Zero a Number? (Abstract Idea)
+                            </summary>
+                            <div class="mt-2 pt-2 border-t border-[#30363d] text-sm space-y-2">
+                                <p class="text-gray-300">
+                                    **Science Idea:** Zero is essential for math and physics, letting us hold a place value (like in 100) and measure nothingness.
+                                </p>
+                                <p class="text-gray-300">
+                                    **Philosophy Idea:** Zero is an **Abstract Idea**. You can't touch it, but you know what it means. It's a concept, not a physical object.
+                                </p>
+                                <p class="text-gray-400">
+                                    **C++ Connection:** **Data Types (`int`, `float`)**. When you tell C++ you want a variable to hold an `int`, you are defining an abstract idea of "a whole number."
+                                </p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- TOPIC 15 -->
+                    <div class="container-card p-4 rounded-xl shadow-xl">
+                        <details>
+                            <summary class="lesson-summary cursor-pointer">
+                                <span class="lesson-icon">💻</span> 15. What is 'Real' vs. 'Virtual'?
+                            </summary>
+                            <div class="mt-2 pt-2 border-t border-[#30363d] text-sm space-y-2">
+                                <p class="text-gray-300">
+                                    **Science Idea:** Scientists use virtual reality and simulations to test things that are too expensive or dangerous to test in the real world.
+                                </p>
+                                <p class="text-gray-300">
+                                    **Philosophy Idea:** This is about **Reality**. If a computer simulation looks and feels completely real, how do we know our world isn't also a simulation?
+                                </p>
+                                <p class="text-gray-400">
+                                    **C++ Connection:** **Virtual Methods**. This programming tool lets a child-class pretend to be its parent-class, even while doing something unique. It acts like something it technically isn't.
+                                </p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- TOPIC 16 -->
+                    <div class="container-card p-4 rounded-xl shadow-xl">
+                        <details>
+                            <summary class="lesson-summary cursor-pointer">
+                                <span class="lesson-icon">⚛️</span> 16. The Power of Smallest Parts (Atoms)
+                            </summary>
+                            <div class="mt-2 pt-2 border-t border-[#30363d] text-sm space-y-2">
+                                <p class="text-gray-300">
+                                    **Science Idea:** Everything is made of tiny things called **Atoms**. How these atoms join together makes a rock, a tree, or you!
+                                </p>
+                                <p class="text-gray-300">
+                                    **Philosophy Idea:** This is **Reductionism**. The idea that to understand a big thing (a car), you must first understand its smallest parts (wheels, engine, doors).
+                                </p>
+                                <p class="text-gray-400">
+                                    **C++ Connection:** **Data Structures/Structs**. These let you build big, complicated data (like a `Car`) by collecting many small, simple pieces of data (like `color` and `speed`).
+                                </p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- TOPIC 17 -->
+                    <div class="container-card p-4 rounded-xl shadow-xl">
+                        <details>
+                            <summary class="lesson-summary cursor-pointer">
+                                <span class="lesson-icon">🔥</span> 17. Why We Forget Things (Entropy)
+                            </summary>
+                            <div class="mt-2 pt-2 border-t border-[#30363d] text-sm space-y-2">
+                                <p class="text-gray-300">
+                                    **Science Idea:** Your brain doesn't just forget things; the connections holding the memory slowly decay or get overwritten. This is like the universe's rule of **Entropy** (disorder always increases).
+                                </p>
+                                <p class="text-gray-300">
+                                    **Philosophy Idea:** This brings up the question of **Change**. Why do all things (buildings, memories, stars) eventually decay and stop existing?
+                                </p>
+                                <p class="text-gray-400">
+                                    **C++ Connection:** **Memory Leaks**. If a program uses up memory but never clears it, the computer gets too messy and slows down, just like a cluttered brain!
+                                </p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- TOPIC 18 -->
+                    <div class="container-card p-4 rounded-xl shadow-xl">
+                        <details>
+                            <summary class="lesson-summary cursor-pointer">
+                                <span class="lesson-icon">🚀</span> 18. The Speed Limit of the Universe (Light)
+                            </summary>
+                            <div class="mt-2 pt-2 border-t border-[#30363d] text-sm space-y-2">
+                                <p class="text-gray-300">
+                                    **Science Idea:** Nothing with mass can travel faster than the speed of light. It's the ultimate **speed limit** set by physics.
+                                </p>
+                                <p class="text-gray-300">
+                                    **Philosophy Idea:** This is about **Limitation**. Why do rules exist that limit what we can do? Does the limit make the universe more stable?
+                                </p>
+                                <p class="text-gray-400">
+                                    **C++ Connection:** **Boundary Conditions**. In programming, we set limits on numbers (e.g., a number can't be bigger than 100). If the code tries to go past the boundary, it stops or throws an error.
+                                </p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- TOPIC 19 -->
+                    <div class="container-card p-4 rounded-xl shadow-xl">
+                        <details>
+                            <summary class="lesson-summary cursor-pointer">
+                                <span class="lesson-icon">🐶</span> 19. Are Animals Thinking?
+                            </summary>
+                            <div class="mt-2 pt-2 border-t border-[#30363d] text-sm space-y-2">
+                                <p class="text-gray-300">
+                                    **Science Idea:** Animals like dogs and birds have complex problem-solving skills, and many feel pain and joy.
+                                </p>
+                                <p class="text-gray-300">
+                                    **Philosophy Idea:** This is the problem of **Other Minds**. Since we can't *be* an animal, how can we truly know what it feels or thinks?
+                                </p>
+                                <p class="text-gray-400">
+                                    **C++ Connection:** **Inheritance**. You can create a parent `Animal` class, and a child `Dog` class will **inherit** the `Animal` traits (like `hasFur()`), but it can also have unique traits (like `wagTail()`).
+                                </p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <!-- TOPIC 20 -->
+                    <div class="container-card p-4 rounded-xl shadow-xl">
+                        <details>
+                            <summary class="lesson-summary cursor-pointer">
+                                <span class="lesson-icon">🤝</span> 20. The Golden Rule (Universal Ethics)
+                            </summary>
+                            <div class="mt-2 pt-2 border-t border-[#30363d] text-sm space-y-2">
+                                <p class="text-gray-300">
+                                    **Science Idea:** Studies show that cooperation (working together) helps groups survive better than groups that are constantly fighting.
+                                </p>
+                                <p class="text-gray-300">
+                                    **Philosophy Idea:** The **Golden Rule** ("Treat others the way you want to be treated") is a universal moral code found in almost every culture. It’s the simplest rule for fairness.
+                                </p>
+                                <p class="text-gray-400">
+                                    **C++ Connection:** **Global Variables/Scope**. The Golden Rule is like a **Global Variable**—it applies to everyone everywhere. A rule that only applies to a small part of the code is called a **Local Variable**.
+                                </p>
+                            </div>
+                        </details>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- 2. STREAM TAB CONTENT (Contribute) -->
+            <div id="content-stream" class="hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    
+                    <!-- Left Column: Upload Form (Sticky/Modal behavior on mobile) -->
+                    <div class="lg:col-span-1">
+                        <div class="container-card p-6 rounded-xl shadow-2xl sticky top-20">
+                            <h2 class="text-2xl font-bold mb-4 border-b border-[#30363d] pb-2 text-violet-400">
+                                Share Your Insight
+                            </h2>
+                            <form id="post-form" onsubmit="handleUpload(event)">
+                                <div class="mb-4">
+                                    <label for="post-title" class="block text-sm font-medium mb-1">Title (Concept/Question):</label>
+                                    <input type="text" id="post-title" required maxlength="100"
+                                        class="w-full p-2 rounded-lg bg-[#0d1117] border border-[#30363d] focus:border-[#a78bfa] focus:ring-1 focus:ring-[#a78bfa] text-white">
+                                </div>
+                                <div class="mb-4">
+                                    <label for="post-url" class="block text-sm font-medium mb-1">Source URL (Optional):</label>
+                                    <input type="url" id="post-url" placeholder="https://example.com/source-article"
+                                        class="w-full p-2 rounded-lg bg-[#0d1117] border border-[#30363d] focus:border-[#a78bfa] focus:ring-1 focus:ring-[#a78bfa] text-white">
+                                </div>
+                                <div class="mb-4">
+                                    <label for="post-content" class="block text-sm font-medium mb-1">Insight (Connect Science & Philosophy):</label>
+                                    <textarea id="post-content" required rows="6" maxlength="5000"
+                                        class="w-full p-2 rounded-lg bg-[#0d1117] border border-[#30363d] focus:border-[#a78bfa] focus:ring-1 focus:ring-[#a78bfa] text-white"></textarea>
+                                    <p class="text-xs text-right text-gray-400">Max 5000 characters.</p>
+                                </div>
+                                <button type="submit" id="submit-btn" class="btn-primary w-full py-2 rounded-lg font-bold">
+                                    Submit Insight
+                                </button>
+                            </form>
+                            <div id="message-box" class="mt-4 p-3 rounded-lg text-sm hidden"></div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Content Feed -->
+                    <div class="lg:col-span-2">
+                        
+                        <!-- Filter Buttons -->
+                        <div class="flex space-x-4 mb-6">
+                            <button id="view-all" onclick="switchStreamView('all')" class="py-2 px-4 rounded-full text-sm font-semibold border border-[#a78bfa] bg-[#a78bfa] text-[#0d1117] transition stream-toggle-active">
+                                All Knowledge
+                            </button>
+                            <button id="view-mine" onclick="switchStreamView('mine')" class="py-2 px-4 rounded-full text-sm font-semibold border border-teal-400 text-teal-400 hover:bg-[#21262d] transition">
+                                My Uploads
+                            </button>
+                        </div>
+                        
+                        <h2 id="stream-title" class="text-3xl font-bold mb-6 text-gray-200">
+                            Knowledge Stream (All)
+                        </h2>
+                        <div id="posts-container" class="space-y-6 post-list">
+                            <!-- Posts will be dynamically inserted here -->
+                        </div>
+                        <p id="no-posts-message" class="text-gray-500 text-center mt-10 hidden">
+                            The knowledge stream is empty. Be the first to share an insight!
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+    </main>
+    
+    <!-- Firebase Imports and Script -->
+    <script type="module">
+        // Import Firebase functions
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, query, addDoc, serverTimestamp, setLogLevel, where } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // 1. GLOBALS & INIT
+        let app;
+        let db;
+        let auth;
+        let userId = 'anonymous';
+        let unsubscribePosts = () => {}; // Function to stop the current Firestore listener
+        let currentStreamView = 'all'; // State for which filter is active: 'all' or 'mine'
+
+        // Essential global variables provided by the environment
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        const POSTS_COLLECTION = `artifacts/${appId}/public/data/hsi_posts`;
+
+        setLogLevel('Debug'); // Enable debug logging for Firestore
+
+        document.addEventListener('DOMContentLoaded', initFirebase);
+
+        /**
+         * Switches the active content tab (Learn or Stream).
+         * @param {string} target - 'learn' or 'stream'.
+         */
+        window.switchTab = function(target) {
+            document.getElementById('content-learn').classList.add('hidden');
+            document.getElementById('content-stream').classList.add('hidden');
+            
+            // Reset tab styles
+            document.getElementById('tab-learn').classList.remove('tab-active', 'text-gray-400', 'hover:text-white');
+            document.getElementById('tab-stream').classList.remove('tab-active', 'text-gray-400', 'hover:text-white');
+            document.getElementById('tab-learn').classList.add('text-gray-400', 'hover:text-white');
+            document.getElementById('tab-stream').classList.add('text-gray-400', 'hover:text-white');
+
+            // Apply active styles
+            document.getElementById(`content-${target}`).classList.remove('hidden');
+            document.getElementById(`tab-${target}`).classList.add('tab-active');
+            document.getElementById(`tab-${target}`).classList.remove('text-gray-400', 'hover:text-white');
+            
+            // If switching to the stream tab, ensure the listener is active
+            if (target === 'stream' && db) {
+                // Force a refresh of the listener to start the default view
+                switchStreamView(currentStreamView);
+            }
+        }
+
+
+        /**
+         * Initializes Firebase and handles user authentication.
+         */
+        async function initFirebase() {
+            try {
+                if (Object.keys(firebaseConfig).length === 0) {
+                    throw new Error("Firebase configuration not found.");
+                }
+                
+                app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+
+                // Authenticate the user
+                onAuthStateChanged(auth, async (user) => {
+                    if (!user) {
+                        try {
+                            if (initialAuthToken) {
+                                await signInWithCustomToken(auth, initialAuthToken);
+                            } else {
+                                await signInAnonymously(auth);
+                            }
+                        } catch (error) {
+                            console.error("Firebase Auth Error:", error);
+                        }
+                    }
+                    
+                    // Once authenticated (or signed in anonymously), set the userId
+                    userId = auth.currentUser?.uid || crypto.randomUUID();
+                    const userIdElement = document.getElementById('user-id');
+                    if (userIdElement) {
+                        userIdElement.textContent = userId.substring(0, 8) + '...';
+                    }
+                    
+                    // Start listening for posts with the default 'all' view
+                    if (db) {
+                        switchStreamView('all');
+                    }
+
+                    document.getElementById('loading').classList.add('hidden');
+                });
+
+            } catch (error) {
+                console.error("Initialization Error:", error);
+                document.getElementById('loading').innerHTML = `<p class="text-red-500">Error initializing Firebase: ${error.message}</p>`;
+            }
+        }
+
+        // 2. DATA LISTENING (READ)
+
+        /**
+         * Switches the active view filter for the Knowledge Stream.
+         * @param {string} view - 'all' or 'mine'.
+         */
+        window.switchStreamView = function(view) {
+            if (view === currentStreamView && unsubscribePosts !== null) {
+                // If view is the same and a listener is already active, do nothing
+                return;
+            }
+
+            currentStreamView = view;
+            
+            // Update UI elements
+            const titleElement = document.getElementById('stream-title');
+            const allBtn = document.getElementById('view-all');
+            const mineBtn = document.getElementById('view-mine');
+
+            allBtn.classList.remove('stream-toggle-active', 'border-teal-400', 'text-teal-400', 'hover:bg-[#21262d]');
+            mineBtn.classList.remove('stream-toggle-active', 'border-teal-400', 'text-teal-400', 'hover:bg-[#21262d]');
+            
+            if (view === 'mine') {
+                titleElement.textContent = 'Knowledge Stream (My Uploads)';
+                allBtn.classList.add('border-teal-400', 'text-teal-400', 'hover:bg-[#21262d]');
+                mineBtn.classList.add('stream-toggle-active');
+            } else { // 'all'
+                titleElement.textContent = 'Knowledge Stream (All)';
+                mineBtn.classList.add('border-teal-400', 'text-teal-400', 'hover:bg-[#21262d]');
+                allBtn.classList.add('stream-toggle-active');
+            }
+            
+            listenForPosts();
+        }
+
+        /**
+         * Sets up a real-time listener for posts in Firestore based on the currentStreamView.
+         */
+        function listenForPosts() {
+            // 1. Unsubscribe from the old listener if one exists
+            unsubscribePosts(); 
+            
+            const postsRef = collection(db, POSTS_COLLECTION);
+            let postsQuery;
+
+            // 2. Determine the query based on the current view
+            if (currentStreamView === 'mine') {
+                // Query for posts uploaded by the current user
+                postsQuery = query(postsRef, where('authorId', '==', userId));
+            } else {
+                // Query for all posts (no filter)
+                postsQuery = query(postsRef); 
+            }
+
+            // 3. Set up the new real-time listener and store its unsubscribe function
+            unsubscribePosts = onSnapshot(postsQuery, (snapshot) => {
+                const posts = [];
+                
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    posts.push({ id: doc.id, ...data });
+                });
+
+                // Sort the posts by timestamp (newest first)
+                posts.sort((a, b) => {
+                    const timeA = a.timestamp?.seconds || 0;
+                    const timeB = b.timestamp?.seconds || 0;
+                    return timeB - timeA;
+                });
+
+                renderPosts(posts);
+
+            }, (error) => {
+                console.error("Error listening for real-time updates:", error);
+                showMessage("Failed to load posts in real-time.", 'bg-red-900 text-red-300');
+            });
+        }
+
+        /**
+         * Renders the list of posts to the DOM.
+         * @param {Array<Object>} posts - The list of posts to render.
+         */
+        function renderPosts(posts) {
+            const container = document.getElementById('posts-container');
+            container.innerHTML = ''; // Clear existing posts
+            
+            const noPostsMessage = document.getElementById('no-posts-message');
+
+            if (posts.length === 0) {
+                noPostsMessage.textContent = currentStreamView === 'mine' 
+                    ? 'You have not uploaded any insights yet. Share your first one above!'
+                    : 'The knowledge stream is empty. Be the first to share an insight!';
+                noPostsMessage.classList.remove('hidden');
+                return;
+            }
+            noPostsMessage.classList.add('hidden');
+
+
+            posts.forEach(post => {
+                const postElement = document.createElement('div');
+                postElement.className = 'container-card p-6 rounded-xl shadow-xl transition transform hover:scale-[1.01] duration-300';
+                
+                // Format date safely
+                let dateString = 'Just now';
+                if (post.timestamp && post.timestamp.toDate) {
+                    try {
+                        dateString = post.timestamp.toDate().toLocaleString();
+                    } catch {
+                        // Keep 'Just now' if date conversion fails
+                    }
+                }
+                
+                // Use a default ID if needed for rendering
+                const displayId = post.authorId ? post.authorId.substring(0, 8) + '...' : 'Unknown';
+
+                let urlSection = '';
+                if (post.url && post.url.startsWith('http')) {
+                    const displayUrl = post.url.length > 50 ? post.url.substring(0, 50) + '...' : post.url;
+                    urlSection = `
+                        <p class="mt-2 text-xs text-violet-400">
+                            Source: <a href="${post.url}" target="_blank" rel="noopener noreferrer" class="hover:underline font-mono">${displayUrl}</a>
+                        </p>
+                    `;
+                }
+                
+                postElement.innerHTML = `
+                    <h3 class="text-2xl font-bold text-teal-300 mb-2">${post.title}</h3>
+                    <div class="text-xs text-gray-500 mb-4 border-b border-[#30363d] pb-2">
+                        Posted by <span class="font-mono text-teal-400">${displayId}</span> on ${dateString}
+                    </div>
+                    <p class="whitespace-pre-wrap text-base leading-relaxed text-gray-300">${post.content}</p>
+                    ${urlSection}
+                `;
+                container.appendChild(postElement);
+            });
+        }
+
+        // 3. DATA WRITING (CREATE)
+
+        /**
+         * Handles the form submission to upload a new post.
+         * @param {Event} event - The form submission event.
+         */
+        window.handleUpload = async function(event) {
+            event.preventDefault();
+            
+            const titleInput = document.getElementById('post-title');
+            const contentInput = document.getElementById('post-content');
+            const urlInput = document.getElementById('post-url');
+            const submitBtn = document.getElementById('submit-btn');
+            const messageBox = document.getElementById('message-box');
+
+            const title = titleInput.value.trim();
+            const content = contentInput.value.trim();
+            const url = urlInput.value.trim();
+
+            if (!title || !content) {
+                showMessage('Title and Insight fields are required.', 'bg-yellow-900 text-yellow-300');
+                return;
+            }
+            
+            // Disable button and show loading state
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+            messageBox.classList.add('hidden');
+
+            try {
+                if (!db) {
+                    throw new Error("Database not initialized.");
+                }
+
+                const newPost = {
+                    title: title,
+                    content: content,
+                    url: url, // Added the URL field
+                    authorId: userId,
+                    timestamp: serverTimestamp() 
+                };
+
+                await addDoc(collection(db, POSTS_COLLECTION), newPost);
+
+                showMessage('Insight successfully shared!', 'bg-green-900 text-green-300');
+                
+                // Clear the form inputs
+                titleInput.value = '';
+                contentInput.value = '';
+                urlInput.value = '';
+                
+            } catch (error) {
+                console.error("Error adding document:", error);
+                showMessage(`Error sharing insight: ${error.message}`, 'bg-red-900 text-red-300');
+            } finally {
+                // Re-enable button and reset text
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Insight';
+            }
+        }
+
+        /**
+         * Utility function to display a temporary message.
+         * @param {string} text - The message text.
+         * @param {string} className - Tailwind classes for styling (e.g., color).
+         */
+        function showMessage(text, className) {
+            const messageBox = document.getElementById('message-box');
+            messageBox.innerText = text;
+            messageBox.className = `mt-4 p-3 rounded-lg text-sm ${className}`;
+            messageBox.classList.remove('hidden');
+            
+            // Auto-hide the message after a few seconds
+            setTimeout(() => {
+                messageBox.classList.add('hidden');
+            }, 5000);
+        }
+        
+    </script>
+</body>
+</html>
