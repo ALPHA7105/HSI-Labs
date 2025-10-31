@@ -40,6 +40,11 @@
             font-size: 1.5rem;
             margin-right: 0.75rem;
         }
+        
+        /* Prevent layout jump when details open/close */
+        details[open] summary {
+            margin-bottom: 0.5rem; /* Matches the 'mt-2' on the content div */
+        }
     </style>
 </head>
 <body class="min-h-screen">
@@ -71,7 +76,7 @@
                 <h2 class="text-3xl font-bold mb-6 text-violet-400">The Lab: Foundations of Science and Philosophy (5th Grade Level)</h2>
                 <p class="text-gray-400 max-w-4xl">Dive into awesome topics! We'll explore big scientific facts and the cool philosophical questions that come with them. Think like a scientist and a philosopher at the same time!</p>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div id="topic-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
                     <!-- TOPIC 1 -->
                     <div class="container-card p-4 rounded-xl shadow-xl">
@@ -479,6 +484,8 @@
         </div>
 
     </main>
+    
+    <!-- SCRIPT for accordion behavior has been REMOVED -->
 
 </body>
 </html>
