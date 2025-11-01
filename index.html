@@ -31,6 +31,9 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        .submission-item:hover .delete-btn {
+            opacity: 1;
+        }
     </style>
     <script>
         tailwind.config = {
@@ -43,6 +46,7 @@
                         'primary': '#818cf8', // Indigo-400 (Vibrant Accent)
                         'secondary-text': '#e2e8f0', // Slate-200
                         'tab-active-bg': '#334155', // Slate-700 for active tab
+                        'delete-red': '#ef4444', // Red-500
                     }
                 }
             }
@@ -114,7 +118,9 @@
             <p class="text-slate-400 mb-8 max-w-xl">
                 Please upload your final work here. Ensure your file is named clearly, including your name and the lab title.
             </p>
-            <div class="p-8 bg-card-dark rounded-xl shadow-2xl border border-primary/30">
+            
+            <!-- UPLOAD INTERFACE -->
+            <div class="p-8 bg-card-dark rounded-xl shadow-2xl border border-primary/30 mb-12">
                 <h3 class="text-2xl text-primary font-semibold mb-4">Upload File</h3>
                 <div class="flex flex-col sm:flex-row gap-4">
                     <input type="text" id="project-name-input" placeholder="Enter Project Name (e.g., 'John Smith - Calorimetry Report')"
@@ -131,6 +137,13 @@
                 </div>
                 <div id="selected-file-name" class="mt-4 text-sm text-slate-500">No file selected.</div>
             </div>
+
+            <!-- PREVIOUS SUBMISSIONS TABLE/LIST (NEW SECTION) -->
+            <h3 class="text-2xl font-bold text-white mb-4 border-b border-slate-700 pb-2">Your Previous Submissions</h3>
+            <div id="submission-list" class="space-y-4">
+                <!-- Submission items will be rendered here -->
+            </div>
+            
         </div>
         <!-- --------------------------------------------------- -->
 
@@ -145,7 +158,7 @@
     </footer>
 
     <script>
-        // --- DATA SECTION: 50 LAB TOPICS ---
+        // --- DATA SECTION ---
         const labTopics = [
             { id: 1, title: "Density Determination", category: "Fundamentals", description: "Measuring mass and volume of solids and liquids to calculate density." },
             { id: 2, title: "Precision and Accuracy", category: "Fundamentals", description: "Practicing measurements and analyzing data for reliability and systematic error." },
@@ -203,6 +216,13 @@
             { id: 50, title: "Electroplating", category: "Acid-Base & Electro", description: "Using an electric current to coat one metal object with a thin layer of another metal." }
         ];
 
+        let previousSubmissions = [
+            { id: 'sub1', project: 'Jane Doe - Specific Heat Lab', file: 'JD_SpecificHeat_Report.pdf', date: '2025-11-01', status: 'Graded (92%)' },
+            { id: 'sub2', project: 'Jane Doe - Boyle\'s Law Data', file: 'JD_BoylesLaw_Spreadsheet.csv', date: '2025-10-28', status: 'Pending Review' },
+            { id: 'sub3', project: 'Jane Doe - Crystallization Photos', file: 'JD_Crystallization_Pics.zip', date: '2025-10-15', status: 'Graded (88%)' },
+        ];
+
+
         // --- STATE AND ELEMENTS ---
         let currentFilter = 'All'; // Current selected category filter
         let searchTerm = ''; // Current search box text
@@ -212,6 +232,7 @@
         const noResults = document.getElementById('no-results');
         const messageBox = document.getElementById('message-box');
         const messageText = document.getElementById('message-text');
+        const submissionList = document.getElementById('submission-list');
 
         // --- CUSTOM INTERACTIVITY FUNCTIONS ---
 
@@ -240,25 +261,53 @@
         function simulateUpload() {
             const projectNameInput = document.getElementById('project-name-input');
             const fileNameDisplay = document.getElementById('selected-file-name');
+            const fileSelector = document.getElementById('file-selector');
+
             const projectName = projectNameInput.value.trim();
-            const fileName = fileNameDisplay.textContent.replace('File selected: ', '');
+            const selectedFile = fileSelector.files[0];
 
             if (projectName.length < 5) {
                 showNotification(`Please enter a descriptive Project Name (min 5 characters).`, true);
                 return;
             }
 
-            if (fileName === 'No file selected.') {
+            if (!selectedFile) {
                 showNotification(`Please select a file to submit.`, true);
                 return;
             }
 
-            showNotification(`Submission confirmed! Project: "${projectName}" with file: "${fileName}".`, false);
+            const newId = 'sub' + (previousSubmissions.length + 1);
+            const newSubmission = {
+                id: newId,
+                project: projectName,
+                file: selectedFile.name,
+                date: new Date().toISOString().slice(0, 10),
+                status: 'Processing...'
+            };
+
+            // Add new submission to the list and re-render
+            previousSubmissions.unshift(newSubmission);
+            renderSubmissions();
+            
+            showNotification(`Submission confirmed! Project: "${projectName}" with file: "${selectedFile.name}".`, false);
             
             // Reset inputs after simulated submission
             projectNameInput.value = '';
             fileNameDisplay.textContent = 'No file selected.';
-            document.getElementById('file-selector').value = '';
+            fileSelector.value = '';
+            fileNameDisplay.classList.remove('text-primary');
+            fileNameDisplay.classList.add('text-slate-500');
+        }
+
+        function simulateDelete(id, projectTitle) {
+            // Confirmation dialog replacement
+            const deleteConfirmed = window.confirm(`Are you sure you want to delete the submission for "${projectTitle}"?`);
+
+            if (deleteConfirmed) {
+                previousSubmissions = previousSubmissions.filter(sub => sub.id !== id);
+                renderSubmissions();
+                showNotification(`Submission for "${projectTitle}" has been deleted.`, true);
+            }
         }
 
         function switchTab(targetId) {
@@ -285,10 +334,10 @@
         }
 
 
-        // --- CORE RENDERING FUNCTIONS (UNCHANGED) ---
+        // --- CORE RENDERING FUNCTIONS ---
 
         /**
-         * Renders the filtered list of topics onto the grid.
+         * Renders the filtered list of topics onto the grid. (Unchanged)
          */
         function renderTopics(topicsToRender) {
             topicsGrid.innerHTML = '';
@@ -318,14 +367,71 @@
                         </button>
                     </div>
                 `;
-                card.onclick = () => viewLesson(topic.title);
+                card.onclick = (e) => { 
+                    // Prevent click if button was clicked
+                    if (e.target.tagName !== 'BUTTON') {
+                        viewLesson(topic.title);
+                    }
+                };
                 topicsGrid.appendChild(card);
             });
         }
+        
+        /**
+         * Renders the list of previous submissions. (NEW FUNCTION)
+         */
+        function renderSubmissions() {
+            submissionList.innerHTML = '';
+
+            if (previousSubmissions.length === 0) {
+                submissionList.innerHTML = `
+                    <div class="text-center py-6 text-slate-500 bg-card-dark rounded-xl border border-slate-700">
+                        <p>You have no previous submissions. Start by uploading a project above!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            previousSubmissions.forEach(sub => {
+                let statusClass = 'text-yellow-400 bg-yellow-900/50'; // Default to Processing
+                if (sub.status.startsWith('Graded')) {
+                    statusClass = sub.status.includes('9') ? 'text-green-400 bg-green-900/50' : 'text-blue-400 bg-blue-900/50';
+                } else if (sub.status.startsWith('Pending')) {
+                    statusClass = 'text-yellow-400 bg-yellow-900/50';
+                }
+
+                const item = document.createElement('div');
+                item.className = 'submission-item flex items-center bg-card-dark p-4 rounded-xl shadow-lg border border-slate-700 transition duration-200 relative overflow-hidden';
+                
+                item.innerHTML = `
+                    <svg class="w-6 h-6 text-primary mr-4 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    
+                    <div class="flex-grow min-w-0">
+                        <p class="text-lg font-semibold text-white truncate">${sub.project}</p>
+                        <p class="text-sm text-slate-400 truncate">${sub.file} · Submitted: ${sub.date}</p>
+                    </div>
+                    
+                    <span class="ml-4 px-3 py-1 text-xs font-semibold rounded-full ${statusClass} flex-shrink-0">
+                        ${sub.status}
+                    </span>
+
+                    <button class="delete-btn opacity-0 ml-4 p-2 rounded-full text-slate-400 hover:text-delete-red transition duration-300 flex-shrink-0"
+                            title="Delete Submission" onclick="simulateDelete('${sub.id}', '${sub.project}')">
+                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                    </button>
+                `;
+                submissionList.appendChild(item);
+            });
+        }
+
 
         /**
          * Applies the current search and filter criteria to the labTopics array
-         * and calls renderTopics.
+         * and calls renderTopics. (Unchanged)
          */
         function updateDisplay() {
             const normalizedSearchTerm = searchTerm.toLowerCase().trim();
@@ -344,7 +450,7 @@
         }
 
         /**
-         * Generates the category filter buttons.
+         * Generates the category filter buttons. (Unchanged)
          */
         function setupFilters() {
             const categories = ['All', ...new Set(labTopics.map(t => t.category))];
@@ -397,6 +503,15 @@
             document.getElementById('file-selector').addEventListener('change', (e) => {
                 const fileNameDisplay = document.getElementById('selected-file-name');
                 if (e.target.files.length > 0) {
+                    // Custom Alert replacement for browser confirmation dialog
+                    if (!window.confirm(`Selected file: ${e.target.files[0].name}. Is this correct?`)) {
+                        e.target.value = ''; // Clear the selection if user cancels
+                        fileNameDisplay.textContent = 'No file selected.';
+                        fileNameDisplay.classList.remove('text-primary');
+                        fileNameDisplay.classList.add('text-slate-500');
+                        return;
+                    }
+                    
                     fileNameDisplay.textContent = `File selected: ${e.target.files[0].name}`;
                     fileNameDisplay.classList.remove('text-slate-500');
                     fileNameDisplay.classList.add('text-primary');
@@ -411,8 +526,12 @@
             searchInput.addEventListener('input', (e) => {
                 searchTerm = e.target.value;
                 // Force switch to 'All' filter on search
-                currentFilter = 'All';
-                document.querySelector('[data-category="All"]').click(); 
+                const allButton = document.querySelector('[data-category="All"]');
+                if (allButton) {
+                    allButton.click();
+                } else {
+                    updateDisplay();
+                }
             });
 
             // 4. Build the category filters
@@ -421,7 +540,10 @@
             // 5. Initial render of all topics
             updateDisplay();
 
-            // 6. Ensure the default tab is active on load
+            // 6. Initial render of submissions
+            renderSubmissions();
+
+            // 7. Ensure the default tab is active on load
             switchTab('lab-topics');
         };
     </script>
