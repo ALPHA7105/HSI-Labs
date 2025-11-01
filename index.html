@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HSI Labs: The Intersection of Science & Philosophy</title>
+    <title>HSI Labs: Science, Philosophy, and Code</title>
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Load Inter Font -->
@@ -28,9 +28,8 @@
         .lesson-summary {
             color: #2dd4bf; /* Teal highlight color */
             font-weight: 600;
-            display: flex;
-            align-items: center;
-            padding: 0.5rem 0;
+            cursor: pointer;
+            transition: color 0.15s;
         }
         .lesson-summary:hover {
             color: #14b8a6;
@@ -38,9 +37,6 @@
         .lesson-icon {
             font-size: 1.5rem;
             margin-right: 0.75rem;
-        }
-        details[open] summary {
-            margin-bottom: 0.5rem;
         }
     </style>
 </head>
@@ -50,29 +46,87 @@
     <header class="sticky top-0 z-20 bg-[#161b22] border-b border-[#30363d] shadow-lg">
         <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
             <h1 class="text-3xl font-extrabold text-[#a78bfa] tracking-wider">
-                ✨ HSI Labs ✨
+                🔬 HSI Labs 🧠
             </h1>
         </div>
-        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex space-x-6">
-            <div class="py-2 text-lg tab-active">
-                The Lab (Learn Fun Topics)
-            </div>
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex space-x-6" id="nav-tabs">
+            <button class="py-3 px-2 text-lg tab-active" data-tab="lab">The Lab (Lessons)</button>
+            <button class="py-3 px-2 text-lg text-gray-400 hover:text-white" data-tab="artifacts">Artifacts Vault (Uploads)</button>
         </nav>
     </header>
 
     <!-- Main Content Layout -->
     <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         
-        <!-- ⭐️ NEW: ASSET UPLOADER SECTION ⭐️ -->
-        <div class="container-card p-6 rounded-xl mb-8">
-            <h2 class="text-xl font-bold mb-4 text-pink-400 flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+        <!-- ---------------------------------------------------- -->
+        <!-- TAB 1: THE LAB (LESSONS) -->
+        <!-- ---------------------------------------------------- -->
+        <div id="tab-lab" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- LEFT COLUMN: LESSON LIST (2/3 width on desktop) -->
+            <div class="lg:col-span-2 space-y-6">
+                <h2 class="text-3xl font-bold text-violet-400">Foundations of Science and Philosophy (5th Grade Level)</h2>
+                <p class="text-gray-400 max-w-4xl">50 awesome topics blending Science, Philosophy, and Code! Click any title to see details and resources in the panel.</p>
+                
+                <div id="topic-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <!-- Topics will be dynamically generated here -->
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN: INTERACTIVE DETAILS PANEL (1/3 width on desktop) -->
+            <div class="lg:col-span-1">
+                <div id="detail-panel" class="sticky top-20 container-card p-6 rounded-xl shadow-2xl space-y-4 h-full">
+                    <h3 class="text-xl font-bold text-pink-400 border-b border-[#30363d] pb-3 mb-3" id="panel-title">
+                        Click a Topic to Learn More
+                    </h3>
+                    
+                    <div id="panel-content" class="text-sm space-y-4">
+                        <p class="text-gray-400">Select any topic from the list on the left to see the detailed breakdown, external video links, and shared class notes (Artifacts).</p>
+                        
+                        <div id="panel-science" class="hidden">
+                            <h4 class="font-semibold text-teal-400">Science Idea:</h4>
+                            <p id="science-text"></p>
+                        </div>
+                        <div id="panel-philosophy" class="hidden">
+                            <h4 class="font-semibold text-teal-400">Philosophy Idea:</h4>
+                            <p id="philosophy-text"></p>
+                        </div>
+                        <div id="panel-code" class="hidden">
+                            <h4 class="font-semibold text-teal-400">Code Connection: (C++)</h4>
+                            <p id="code-text"></p>
+                        </div>
+                        
+                        <div id="panel-links" class="pt-4 border-t border-[#30363d] hidden">
+                            <h4 class="font-semibold text-violet-400 mb-2">Video/Research Links:</h4>
+                            <ul id="links-list" class="space-y-1 text-xs"></ul>
+                        </div>
+
+                        <div id="panel-assets" class="pt-4 border-t border-[#30363d] hidden">
+                            <h4 class="font-semibold text-violet-400 mb-2">Artifacts Vault:</h4>
+                            <ul id="assets-list" class="space-y-1 text-xs">
+                                <!-- Assets associated with this lesson will go here -->
+                                <li class="text-gray-400">No shared artifacts for this topic yet.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ---------------------------------------------------- -->
+        <!-- TAB 2: ARTIFACTS VAULT (UPLOAD) -->
+        <!-- ---------------------------------------------------- -->
+        <div id="tab-artifacts" class="hidden container-card p-8 rounded-xl shadow-2xl space-y-6">
+            <h2 class="text-3xl font-bold text-pink-400 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m4 4v10m8-4v4m-8-4v4" />
                 </svg>
-                Upload Assets (Diagrams, Notes, Research)
+                Artifacts Vault: Upload Research & Notes
             </h2>
             
-            <div class="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
+            <p class="text-gray-400 max-w-4xl">Use this vault to share diagrams, research papers, and notes related to the topics in the Lab. All uploaded assets are public for all users in this app.</p>
+
+            <div class="flex flex-col sm:flex-row gap-3 items-start sm:items-center py-4 border-t border-b border-[#30363d]">
                 <input 
                     type="file" 
                     id="assetFile" 
@@ -88,253 +142,28 @@
                     id="uploadButton"
                     class="py-2 px-6 bg-teal-500 hover:bg-teal-600 text-white font-bold rounded-lg shadow-lg transition duration-150 ease-in-out w-full sm:w-auto flex-shrink-0"
                 >
-                    Upload
+                    Upload Artifact
                 </button>
             </div>
             
             <p id="uploadMessage" class="mt-3 text-sm text-gray-400"></p>
+
+            <h3 class="text-xl font-bold text-violet-400 mt-8">Shared Artifacts List</h3>
+            <ul id="shared-artifacts-list" class="space-y-2 text-sm">
+                <li class="text-gray-400">The list of shared files will load here once uploaded (via Firebase Storage).</li>
+            </ul>
         </div>
-
-        <!-- END ASSET UPLOADER SECTION -->
-        
-        <!-- 2. LEARN TOPICS CONTENT -->
-        <div>
-            <div class="space-y-6">
-                <h2 class="text-3xl font-bold mb-6 text-violet-400">The Lab: Foundations of Science and Philosophy (5th Grade Level)</h2>
-                <p class="text-gray-400 max-w-4xl">Dive into awesome topics! We'll explore big scientific facts and the cool philosophical questions that come with them. Think like a scientist and a philosopher at the same time!</p>
-                
-                <div id="topic-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-                    <!-- TOPIC 1 -->
-                    <div class="container-card p-4 rounded-xl shadow-xl">
-                        <details>
-                            <summary class="lesson-summary cursor-pointer">
-                                <span class="lesson-icon">🌕</span> 1. Why the Moon Doesn't Fall (Inertia)
-                            </summary>
-                            <div class="mt-2 pt-2 text-sm space-y-2">
-                                <p class="text-gray-300">
-                                    **Science Idea:** The Moon always tries to fly straight, but Earth's **Gravity** keeps pulling it sideways. It's always falling *around* us!
-                                </p>
-                                <p class="text-gray-300">
-                                    **Philosophy Idea:** This is about **Cause and Effect**. The cause (gravity) has a predictable effect (orbit). Everything happens for a reason.
-                                </p>
-                                <p class="text-gray-400">
-                                    **C++ Connection:** **Constants (`const`)**. Once we set Earth's gravity or the Moon's speed, it doesn't change! Computer code uses `const` to keep values predictable.
-                                </p>
-                                <p class="text-gray-400 flex items-center mt-2 pt-2 border-t border-[#30363d] text-xs uppercase font-medium tracking-wider">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-teal-400" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 10a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1-4a1 1 0 100 2h4a1 1 0 100-2H7z" clip-rule="evenodd" />
-                                    </svg>
-                                    Asset Link: Diagram of Orbital Decay.pdf
-                                </p>
-                            </div>
-                        </details>
-                    </div>
-
-                    <!-- TOPIC 2 -->
-                    <div class="container-card p-4 rounded-xl shadow-xl">
-                        <details>
-                            <summary class="lesson-summary cursor-pointer">
-                                <span class="lesson-icon">🌌</span> 2. The Mystery of Nothing (Vacuum Energy)
-                            </summary>
-                            <div class="mt-2 pt-2 text-sm space-y-2">
-                                <p class="text-gray-300">
-                                    **Science Idea:** Even empty space (a **vacuum**) isn't totally empty! Tiny energy bubbles pop in and out of existence all the time.
-                                </p>
-                                <p class="text-gray-300">
-                                    **Philosophy Idea:** This asks: Can something come from **Nothing**? It challenges the idea that a truly empty space is possible.
-                                </p>
-                                <p class="text-gray-400">
-                                    **C++ Connection:** **Null Pointers**. This is like trying to point to something that isn't there (like a blank space), but the computer still needs to check if it's truly empty.
-                                </p>
-                                <p class="text-gray-400 flex items-center mt-2 pt-2 border-t border-[#30363d] text-xs uppercase font-medium tracking-wider">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1 text-teal-400" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 10a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1-4a1 1 0 100 2h4a1 1 0 100-2H7z" clip-rule="evenodd" />
-                                    </svg>
-                                    Asset Link: Uploaded Vacuum Fluctuation Image
-                                </p>
-                            </div>
-                        </details>
-                    </div>
-
-                    <!-- TOPIC 3 (Rest of the topics remain the same for brevity) -->
-                    <div class="container-card p-4 rounded-xl shadow-xl">
-                        <details>
-                            <summary class="lesson-summary cursor-pointer">
-                                <span class="lesson-icon">🔬</span> 3. What is a 'Fact'? (Testing Ideas)
-                            </summary>
-                            <div class="mt-2 pt-2 border-t border-[#30363d] text-sm space-y-2">
-                                <p class="text-gray-300">
-                                    **Science Idea:** A scientific **fact** is an idea tested many times by many people. If it keeps passing, we call it a fact!
-                                </p>
-                                <p class="text-gray-300">
-                                    **Philosophy Idea:** This is **Empiricism** (knowledge comes from senses) and **Evidence**. We only believe things we can check ourselves.
-                                </p>
-                                <p class="text-gray-400">
-                                    **C++ Connection:** **Boolean Logic (`true`/`false`)**. A computer can only decide if a statement is definitely true or definitely false, just like testing a fact.
-                                </p>
-                            </div>
-                        </details>
-                    </div>
-
-                    <!-- TOPIC 4 -->
-                    <div class="container-card p-4 rounded-xl shadow-xl">
-                        <details>
-                            <summary class="lesson-summary cursor-pointer">
-                                <span class="lesson-icon">🤖</span> 4. Can Robots Have Feelings?
-                            </summary>
-                            <div class="mt-2 pt-2 border-t border-[#30363d] text-sm space-y-2">
-                                <p class="text-gray-300">
-                                    **Science Idea:** Computers are great at copying feelings (like smiling), but they don't have the hormones and biology that cause *real* emotions.
-                                </p>
-                                <p class="text-gray-300">
-                                    **Philosophy Idea:** This is the **Mind-Body Problem**. Where do our feelings (mind) come from, and how are they connected to our body?
-                                </p>
-                                <p class="text-gray-400">
-                                    **C++ Connection:** **Functions**. A function takes input (like seeing a friend) and runs code to produce an output (like saying "hello"). But it doesn't *feel* happy doing it.
-                                </p>
-                            </div>
-                        </details>
-                    </div>
-
-                    <!-- TOPIC 5 -->
-                    <div class="container-card p-4 rounded-xl shadow-xl">
-                        <details>
-                            <summary class="lesson-summary cursor-pointer">
-                                <span class="lesson-icon">📚</span> 5. The Infinite Library (Possibility)
-                            </summary>
-                            <div class="mt-2 pt-2 border-t border-[#30363d] text-sm space-y-2">
-                                <p class="text-gray-300">
-                                    **Science Idea:** The universe might be **infinite**, meaning it never ends. If it never ends, every possibility exists somewhere!
-                                </p>
-                                <p class="text-gray-300">
-                                    **Philosophy Idea:** This is the concept of **Infinity**. It's a number that is bigger than any number you can think of. It's mind-bending!
-                                </p>
-                                <p class="text-gray-400">
-                                    **C++ Connection:** **Memory Pointers**. A pointer is like a road sign to data. If we had infinite memory, we could use pointers to remember every single piece of information possible.
-                                </p>
-                            </div>
-                        </details>
-                    </div>
-
-                    <!-- TOPIC 6 -->
-                    <div class="container-card p-4 rounded-xl shadow-xl">
-                        <details>
-                            <summary class="lesson-summary cursor-pointer">
-                                <span class="lesson-icon">⚖️</span> 6. Why are there Rules for Everything?
-                            </summary>
-                            <div class="mt-2 pt-2 border-t border-[#30363d] text-sm space-y-2">
-                                <p class="text-gray-300">
-                                    **Science Idea:** The laws of physics are like rules that the universe *must* follow. They keep planets spinning and light moving.
-                                </p>
-                                <p class="text-gray-300">
-                                    **Philosophy Idea:** This relates to **Ethics** and **Justice**. Rules make life fair and predictable, whether in the universe or on the playground.
-                                </p>
-                                <p class="text-gray-400">
-                                    **C++ Connection:** **`if/else` Statements**. These are the rules of programming! The computer checks a condition and follows one path (`if`) or a different path (`else`).
-                                </p>
-                            </div>
-                        </details>
-                    </div>
-
-                    <!-- TOPIC 7 -->
-                    <div class="container-card p-4 rounded-xl shadow-xl">
-                        <details>
-                            <summary class="lesson-summary cursor-pointer">
-                                <span class="lesson-icon">📦</span> 7. Sorting the World (Categories)
-                            </summary>
-                            <div class="mt-2 pt-2 border-t border-[#30363d] text-sm space-y-2">
-                                <p class="text-gray-300">
-                                    **Science Idea:** We sort plants and animals into categories like mammal, fish, and bird.
-                                </p>
-                                <p class="text-gray-300">
-                                    **Philosophy Idea:** This is **Metaphysics**. It's about how we define what things *are*. When we sort, we create groups based on core ideas.
-                                </p>
-                                <p class="text-gray-400">
-                                    **C++ Connection:** **Arrays and Vectors**. These are lists used to hold a collection of things that are all the same type (like a list of numbers or a list of words).
-                                </p>
-                            </div>
-                        </details>
-                    </div>
-
-                    <!-- TOPIC 8 -->
-                    <div class="container-card p-4 rounded-xl shadow-xl">
-                        <details>
-                            <summary class="lesson-summary cursor-pointer">
-                                <span class="lesson-icon">⏱️</span> 8. The Arrow of Time (No Going Back)
-                            </summary>
-                            <div class="mt-2 pt-2 border-t border-[#30363d] text-sm space-y-2">
-                                <p class="text-gray-300">
-                                    **Science Idea:** Time only moves one way, forward. This is often linked to **Entropy** (things always break down or get messier).
-                                </p>
-                                <p class="text-gray-300">
-                                    **Philosophy Idea:** This relates to **Determinism**. Does every moment happen because of the moment before it? Can we ever truly change the past?
-                                </p>
-                                <p class="text-gray-400">
-                                    **C++ Connection:** **Sequence of Operations**. A computer runs code line-by-line. It must finish line 1 before it can start line 2, and it can never go back and change line 1 after it's run.
-                                </p>
-                            </div>
-                        </details>
-                    </div>
-
-                    <!-- TOPIC 9 -->
-                    <div class="container-card p-4 rounded-xl shadow-xl">
-                        <details>
-                            <summary class="lesson-summary cursor-pointer">
-                                <span class="lesson-icon">⭐</span> 9. What Makes a Hero 'Good'?
-                            </summary>
-                            <div class="mt-2 pt-2 border-t border-[#30363d] text-sm space-y-2">
-                                <p class="text-gray-300">
-                                    **Science Idea:** Psychologists study why people choose to help others or choose to be selfish.
-                                </p>
-                                <p class="text-gray-300">
-                                    **Philosophy Idea:** This is **Virtue Ethics**. It asks, "What kind of person should I be?" A hero is a person who has good *character* (like honesty and bravery).
-                                </p>
-                                <p class="text-gray-400">
-                                    **C++ Connection:** **Object-Oriented Design (Classes)**. A class bundles information and actions together. A `Hero` class has attributes (like strength) and methods (like `fightEvil()`).
-                                </p>
-                            </div>
-                        </details>
-                    </div>
-
-                    <!-- TOPIC 10 -->
-                    <div class="container-card p-4 rounded-xl shadow-xl">
-                        <details>
-                            <summary class="lesson-summary cursor-pointer">
-                                <span class="lesson-icon">✨</span> 10. The Many Worlds of Quantum Physics
-                            </summary>
-                            <div class="mt-2 pt-2 border-t border-[#30363d] text-sm space-y-2">
-                                <p class="text-gray-300">
-                                    **Science Idea:** Some scientists think that every time something *could* happen, it *does* happen in a different parallel universe.
-                                </p>
-                                <p class="text-gray-300">
-                                    **Philosophy Idea:** This relates to **Possibility**. If all possibilities happen, how special is our one world?
-                                </p>
-                                <p class="text-gray-400">
-                                    **C++ Connection:** **Threading/Parallel Processing**. This is when a computer runs many pieces of code at the *exact same time*. It’s like running many small programs in parallel worlds.
-                                </p>
-                            </div>
-                        </details>
-                    </div>
-
-                    <!-- ... (Topics 11-20 are here for completeness but omitted for chat brevity) ... -->
-                </div>
-            </div>
-            
-        </div>
-
     </main>
     
-    <!-- ⭐️ NEW: FIREBASE AND UPLOAD LOGIC ⭐️ -->
+    <!-- ⭐️ FIREBASE AND APPLICATION LOGIC ⭐️ -->
     <script type="module">
         // --- FIREBASE IMPORTS ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { getStorage, ref, uploadBytes } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
+        import { getFirestore, collection, doc, setDoc, query, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-storage.js";
         import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
 
-        // Set Firebase logging level to Debug
         setLogLevel('Debug');
 
         // --- GLOBAL VARIABLES (Provided by Canvas) ---
@@ -346,35 +175,320 @@
         let userId = null;
         let isAuthReady = false;
 
+        // --- DOM Elements ---
         const uploadButton = document.getElementById('uploadButton');
         const assetFile = document.getElementById('assetFile');
         const uploadMessage = document.getElementById('uploadMessage');
+        const sharedArtifactsList = document.getElementById('shared-artifacts-list');
+        const topicGrid = document.getElementById('topic-grid');
+        const detailPanel = document.getElementById('detail-panel');
+        const panelTitle = document.getElementById('panel-title');
+        const panelScience = document.getElementById('panel-science');
+        const panelPhilosophy = document.getElementById('panel-philosophy');
+        const panelCode = document.getElementById('panel-code');
+        const linksList = document.getElementById('links-list');
+        const assetsList = document.getElementById('assets-list');
+        const navTabs = document.getElementById('nav-tabs');
+        const tabLab = document.getElementById('tab-lab');
+        const tabArtifacts = document.getElementById('tab-artifacts');
+        
+        // --- DATA STRUCTURE: 50 TOPICS ---
+        const LESSONS = [
+            // Original 10 Topics
+            { id: 1, icon: '🌕', title: "Why the Moon Doesn't Fall (Inertia)", 
+                science: "The Moon always tries to fly straight, but Earth's **Gravity** keeps pulling it sideways. It's always falling *around* us!", 
+                philosophy: "This is about **Cause and Effect**. The cause (gravity) has a predictable effect (orbit). Everything happens for a reason.", 
+                code: "**Constants (`const`)**. Once we set Earth's gravity or the Moon's speed, it doesn't change! Computer code uses `const` to keep values predictable.",
+                links: [{title: "Alice & Bob in Wonderland: Why doesn't the moon fall down?", url: "https://www.youtube.com/watch?v=BXnhEDMUJt8"}]},
+            { id: 2, icon: '🌌', title: "The Mystery of Nothing (Vacuum Energy)", 
+                science: "Even empty space (a **vacuum**) isn't totally empty! Tiny energy bubbles pop in and out of existence all the time (quantum fluctuations).", 
+                philosophy: "This asks: Can something come from **Nothing**? It challenges the idea that a truly empty space is possible.", 
+                code: "**Null Pointers**. This is like trying to point to something that isn't there (like a blank space), but the computer still needs to check if it's truly empty.",
+                links: [{title: "What Is Vacuum? All You Need To Know.", url: "https://www.youtube.com/watch?v=0sl9eTsxfw8"}]},
+            { id: 3, icon: '🔬', title: "What is a 'Fact'? (Testing Ideas)", 
+                science: "A scientific **fact** is an idea tested many times by many people. If it keeps passing, we call it a fact!", 
+                philosophy: "This is **Empiricism** (knowledge comes from senses) and **Evidence**. We only believe things we can check ourselves.", 
+                code: "**Boolean Logic (`true`/`false`)**. A computer can only decide if a statement is definitely true or definitely false, just like testing a fact.",
+                links: [{title: "The Scientific Method: Steps, Examples, Tips, and Exercise", url: "https://www.youtube.com/watch?v=yi0hwFDQTSQ"}]},
+            { id: 4, icon: '🤖', title: "Can Robots Have Feelings? (AI vs. Emotion)", 
+                science: "Computers are great at copying feelings (like smiling), but they don't have the hormones and biology that cause *real* emotions.", 
+                philosophy: "This is the **Mind-Body Problem**. Where do our feelings (mind) come from, and how are they connected to our body?", 
+                code: "**Functions**. A function takes input (like seeing a friend) and runs code to produce an output (like saying 'hello'). But it doesn't *feel* happy doing it.",
+                links: [{title: "How can a Robot succeed to have Human Feelings", url: "https://www.youtube.com/watch?v=KYRhkqb9tbc"}]},
+            { id: 5, icon: '📚', title: "The Infinite Library (Possibility)", 
+                science: "The universe might be **infinite**, meaning it never ends. If it never ends, every possibility exists somewhere!", 
+                philosophy: "This is the concept of **Infinity**. It's a number that is bigger than any number you can think of. It's mind-bending!", 
+                code: "**Memory Pointers**. A pointer is like a road sign to data. If we had infinite memory, we could use pointers to remember every single piece of information possible.",
+                links: []},
+            { id: 6, icon: '⚖️', title: "Why are there Rules for Everything? (Laws)", 
+                science: "The laws of physics are like rules that the universe *must* follow. They keep planets spinning and light moving.", 
+                philosophy: "This relates to **Ethics** and **Justice**. Rules make life fair and predictable, whether in the universe or on the playground.", 
+                code: "**`if/else` Statements**. These are the rules of programming! The computer checks a condition and follows one path (`if`) or a different path (`else`).",
+                links: []},
+            { id: 7, icon: '📦', title: "Sorting the World (Categories)", 
+                science: "We sort plants and animals into categories like mammal, fish, and bird. This is called taxonomy.", 
+                philosophy: "This is **Metaphysics**. It's about how we define what things *are*. When we sort, we create groups based on core ideas.", 
+                code: "**Arrays and Vectors**. These are lists used to hold a collection of things that are all the same type (like a list of numbers or a list of words).",
+                links: []},
+            { id: 8, icon: '⏱️', title: "The Arrow of Time (No Going Back)", 
+                science: "Time only moves one way, forward. This is often linked to **Entropy** (things always break down or get messier).", 
+                philosophy: "This relates to **Determinism**. Does every moment happen because of the moment before it? Can we ever truly change the past?", 
+                code: "**Sequence of Operations**. A computer runs code line-by-line. It must finish line 1 before it can start line 2, and it can never go back and change line 1 after it's run.",
+                links: []},
+            { id: 9, icon: '⭐', title: "What Makes a Hero 'Good'? (Virtue)", 
+                science: "Psychologists study why people choose to help others or choose to be selfish.", 
+                philosophy: "This is **Virtue Ethics**. It asks, 'What kind of person should I be?' A hero is a person who has good *character* (like honesty and bravery).", 
+                code: "**Object-Oriented Design (Classes)**. A class bundles information and actions together. A `Hero` class has attributes (like strength) and methods (like `fightEvil()`).",
+                links: []},
+            { id: 10, icon: '✨', title: "The Many Worlds of Quantum Physics", 
+                science: "Some scientists think that every time something *could* happen, it *does* happen in a different parallel universe.", 
+                philosophy: "This relates to **Possibility**. If all possibilities happen, how special is our one world?", 
+                code: "**Threading/Parallel Processing**. This is when a computer runs many pieces of code at the *exact same time*. It’s like running many small programs in parallel worlds.",
+                links: []},
+            
+            // 40 New Topics (11-50)
+            { id: 11, icon: '💧', title: "Why Does Ice Float? (Density)", 
+                science: "Water molecules spread out when they freeze, making ice less **dense** than liquid water.", 
+                philosophy: "**The Exception to the Rule**. When a pattern (most things shrink when cold) is broken, we learn something new about reality.", 
+                code: "**Edge Cases**. In programming, you must test for the rare situation that breaks the main pattern (like when water freezes).",
+                links: []},
+            { id: 12, icon: '🌀', title: "The Butterfly Effect (Chaos Theory)", 
+                science: "A tiny change (like a butterfly flapping its wings) can lead to huge, unpredictable changes much later (like a hurricane).", 
+                philosophy: "**Interconnectedness**. Everything is linked! Even small actions have huge, long-term consequences.", 
+                code: "**Floating Point Precision**. Tiny, almost invisible differences in starting numbers can lead to wildly different final answers in a program.",
+                links: []},
+            { id: 13, icon: '👁️', title: "Is Seeing Believing? (Perception)", 
+                science: "Our brain fills in missing information and corrects our vision, so we don't always see exactly what is there.", 
+                philosophy: "**Epistemology**. The study of knowledge: How do we know what we know? Can we trust our eyes?", 
+                code: "**Input Validation**. The computer must always check if the data it gets from the user (input) is real and accurate, just like our brain checks our eyes.",
+                links: []},
+            { id: 14, icon: '🍄', title: "The Wood Wide Web (Ecology)", 
+                science: "Trees and fungi share resources and warnings using underground networks of roots and threads.", 
+                philosophy: "**Mutualism/Community**. Nature shows us that living things survive and thrive best by helping each other.", 
+                code: "**Network Protocol**. This is a set of rules (like TCP/IP) that lets many different computers talk to and share resources with each other.",
+                links: []},
+            { id: 15, icon: '🧱', title: "The Smallest Building Block (Atoms)", 
+                science: "Everything we see is made of tiny, invisible particles called **atoms**.", 
+                philosophy: "**Reductionism**. We can understand big, complicated things by breaking them down into their smallest, simplest parts.", 
+                code: "**Variables**. Everything in a program is built from simple variables (like integers and strings), which are the building blocks of data.",
+                links: []},
+            { id: 16, icon: '💭', title: "What is Consciousness?", 
+                science: "Scientists study brain waves and activity to figure out when a person is 'aware' or 'thinking'.", 
+                philosophy: "**Self-Awareness**. The amazing ability to know that you are you, separate from the rest of the world.", 
+                code: "**The Operating System**. The main program that controls the computer and knows what all the other programs are doing.",
+                links: []},
+            { id: 17, icon: '🚀', title: "Escape Velocity (Leaving Earth)", 
+                science: "To break free of a planet's gravity, an object needs to reach a specific **Escape Velocity** (really, really fast!).", 
+                philosophy: "**Overcoming Obstacles**. To achieve a big goal, you have to overcome a powerful force (like gravity, or fear, or laziness).", 
+                code: "**Iteration/Looping**. A program runs a loop over and over, building up speed and power until it hits a necessary threshold to exit the loop.",
+                links: []},
+            { id: 18, icon: '🗣️', title: "Why Do We Use Language? (Symbols)", 
+                science: "Language allows us to combine simple sounds into complex ideas (e.g., combining 'sun' and 'light' to make 'sunlight').", 
+                philosophy: "**Semiotics**. The study of signs and symbols. Our words are just symbols we agree on to mean certain things.", 
+                code: "**Compilers**. A tool that translates human-readable code (symbols) into machine code (binary numbers) so the computer can understand it.",
+                links: []},
+            { id: 19, icon: '🌈', title: "The Colors We Can't See (Spectrum)", 
+                science: "Our eyes only see a tiny bit of light (the **Visible Spectrum**). Most light is invisible, like X-rays or Radio waves.", 
+                philosophy: "**Limits of Knowledge**. We must remember that reality is bigger than what our senses can show us.", 
+                code: "**Data Types**. A computer can only process the types of data it is programmed for (like `int` or `float`). The rest of the data is invisible to it.",
+                links: []},
+            { id: 20, icon: '⚫', title: "The Edge of a Black Hole (Event Horizon)", 
+                science: "A black hole is so dense that nothing, not even light, can escape once it crosses the **Event Horizon**.", 
+                philosophy: "**No Return**. This concept is about a point of no return—a decision or action that permanently changes everything.", 
+                code: "**Commit/Rollback**. Once you 'commit' a change in a database, it's final. There's no way to 'rollback' to the way things were before the change.",
+                links: []},
+            { id: 21, icon: '♻️', title: "The Cycle of Life (Conservation of Mass)", 
+                science: "Matter is neither created nor destroyed, it just changes form (like a leaf turning into soil).", 
+                philosophy: "**Permanence and Change**. While forms change (life to death), the core substance of the universe remains permanent.", 
+                code: "**Memory Management**. The computer recycles memory: when a program finishes, the used memory is cleaned up and made available for a new process.",
+                links: []},
+            { id: 22, icon: '⚖️', title: "Are People Naturally Good or Bad?", 
+                science: "Psychology shows we have instincts for both selfish behavior (survival) and cooperation (social bonding).", 
+                philosophy: "**Human Nature**. The core question of what we are born as: blank slates, or pre-programmed with good/bad tendencies.", 
+                code: "**Default Values**. When you create a new variable, what value does it start with? Zero? Null? This is the 'default nature' of data.",
+                links: []},
+            { id: 23, icon: '📐', title: "Why Pi is Puzzling ($$\pi$$)", 
+                science: "Pi ($\pi$) is the ratio of a circle's circumference to its diameter, but its decimal never ends and never repeats.", 
+                philosophy: "**Rationality vs. Irrationality**. The universe contains numbers that cannot be perfectly contained or expressed by simple human counting systems.", 
+                code: "**Data Overflow**. When a computer tries to store a number that is bigger than its memory slot can hold, causing it to fail or return an incorrect value.",
+                links: []},
+            { id: 24, icon: '🕰️', title: "Is Time the Same for Everyone? (Relativity)", 
+                science: "For someone moving very fast, time actually slows down compared to someone standing still (Einstein's Relativity).", 
+                philosophy: "**Subjectivity of Experience**. Your personal experience of reality (including time) is unique to you.", 
+                code: "**Time Stamps**. Every action in a computer is logged with a time stamp, but that time stamp depends on the clock of the specific server it's running on.",
+                links: []},
+            { id: 25, icon: '⚙️', title: "How Do Simple Machines Work? (Leverage)", 
+                science: "Simple machines (like levers and wheels) allow us to trade distance for force, making work easier.", 
+                philosophy: "**Efficiency**. Finding the simplest, most elegant way to solve a difficult problem with minimal waste.", 
+                code: "**Code Optimization**. Making your code shorter and simpler so the computer can run it faster and more efficiently.",
+                links: []},
+            { id: 26, icon: '💭', title: "The Ship of Theseus (Identity)", 
+                science: "If you replace every part of an old ship, plank by plank, is it still the same ship?", 
+                philosophy: "**Personal Identity**. If your cells and memories change over time, are you the same person you were 10 years ago?", 
+                code: "**Versioning/Upgrades**. When you upgrade a program by replacing all its files, is it still the original program? Yes, because the 'core idea' is the same.",
+                links: []},
+            { id: 27, icon: '☀️', title: "Where Does Light Come From? (Photons)", 
+                science: "Light is made of tiny packets of energy called **photons** that travel incredibly fast in waves.", 
+                philosophy: "**First Cause**. The ancient question: What was the *first* thing? Where did the very first light (energy) come from?", 
+                code: "**Initialization**. The very first instruction a program runs to start itself up and create its first variables and data.",
+                links: []},
+            { id: 28, icon: '👂', title: "Echoes and Reflection (Waves)", 
+                science: "Sound waves bounce off hard surfaces, creating echoes. Light waves bounce off surfaces, letting us see.", 
+                philosophy: "**The Mirror**. We learn about ourselves by seeing how our actions 'reflect' back at us from others.", 
+                code: "**Callbacks/Signals**. A function that runs *after* something else happens (like a sound wave returning).",
+                links: []},
+            { id: 29, icon: '🦠', title: "The Power of a Single Cell (Life)", 
+                science: "All life starts from a single cell that divides and specializes to create complex organisms.", 
+                philosophy: "**Emergence**. When simple parts (like cells) interact to create a completely new and complex thing (like a human).", 
+                code: "**Recursive Functions**. A function that calls itself over and over to build a complex result from a simple starting point.",
+                links: []},
+            { id: 30, icon: '🏔️', title: "The Scale of the Universe (Vastness)", 
+                science: "The distance to the nearest star is $4.2$ light-years, which means the light took $4.2$ years to reach us.", 
+                philosophy: "**Humility**. Realizing how small and temporary we are compared to the vastness of space and time.", 
+                code: "**Big Integers**. Special variables needed to hold numbers that are too big for a normal number slot in the computer.",
+                links: []},
+            { id: 31, icon: '🤔', title: "Why Do We Forget Things? (Memory)", 
+                science: "Our brain prunes unused connections (synapses) to make space for new, more important memories.", 
+                philosophy: "**The Value of Forgetting**. Is forgetting a bad thing, or is it necessary to allow for growth and new ideas?", 
+                code: "**Garbage Collection**. A process in programming that automatically deletes data that is no longer being used to free up memory.",
+                links: []},
+            { id: 32, icon: '🔮', title: "Can We Predict the Future? (Probability)", 
+                science: "We can never know *exactly* what will happen, but we can use math (probability) to guess the *chances* of something happening.", 
+                philosophy: "**Free Will vs. Fate**. If the future is predictable, are our choices truly free?", 
+                code: "**Random Number Generators**. Code that produces numbers that look random, but are actually determined by a starting number (a 'seed').",
+                links: []},
+            { id: 33, icon: '⏳', title: "Flipping the Hourglass (Reversibility)", 
+                science: "Almost all physics laws work the same forwards and backwards in time, except for the messy changes of Entropy (Topic 8).", 
+                philosophy: "**Regret**. The feeling that you wish you could reverse a past decision, even if reality makes it impossible.", 
+                code: "**Undo/Redo Functionality**. Storing previous states of data so the user can easily reverse their most recent actions.",
+                links: []},
+            { id: 34, icon: '🍏', title: "Eating the Sun's Energy (Photosynthesis)", 
+                science: "Plants take energy from the sun, water, and air to make their own food and grow.", 
+                philosophy: "**Transformation**. Life's power to take non-living things (light, water, dirt) and transform them into living structures.", 
+                code: "**Data Processing Pipelines**. Taking raw input data (sunlight/water) and transforming it step-by-step into usable output (plant structure/energy).",
+                links: []},
+            { id: 35, icon: '🎭', title: "The Problem of Other Minds", 
+                science: "We can only ever know our own feelings, and we have to guess or assume that other people have feelings too.", 
+                philosophy: "**Solipsism**. The idea that only your own mind is sure to exist. Can you really know what someone else is thinking?", 
+                code: "**Remote Procedure Call (RPC)**. One computer sends a request to another computer, and it has to trust that the other computer will execute the task correctly and send back the result.",
+                links: []},
+            { id: 36, icon: '🚧', title: "The Limit of Speed ($$c$$)", 
+                science: "Nothing with mass can travel faster than the speed of light ($c$, approximately $3 \times 10^8 \text{ m/s}$ in a vacuum).", 
+                philosophy: "**Hard Limits**. The universe has fundamental, unbreakable rules that cannot be violated, no matter how hard we try.", 
+                code: "**Maximum Capacity**. Setting a limit on a variable or a system (e.g., maximum file size, or a `MAX_VELOCITY` constant) that the program cannot exceed.",
+                links: []},
+            { id: 37, icon: '🔍', title: "Zooming In Forever (Fractals)", 
+                science: "Fractals are shapes where the same pattern repeats itself endlessly, no matter how much you zoom in.", 
+                philosophy: "**Self-Similarity**. Finding the same structures and patterns in very different places (e.g., the shape of a river delta and the shape of a tree branch).", 
+                code: "**Pattern Recognition**. Algorithms that look for repeating or predictable sequences of data to find meaning.",
+                links: []},
+            { id: 38, icon: '🕰️', title: "The Oldest Things (Cosmic Background)", 
+                science: "The oldest light we can see is the **Cosmic Microwave Background (CMB)**, leftover heat from the Big Bang.", 
+                philosophy: "**Origin Stories**. Every civilization has a story about how the world began. The CMB is the universe's oldest evidence.", 
+                code: "**Initial State**. Before any code runs, a system needs a 'default' or 'initial state' (like the CMB) from which all later actions proceed.",
+                links: []},
+            { id: 39, icon: '🐍', title: "Why Viruses Aren't 'Alive'", 
+                science: "Viruses are bits of code (DNA/RNA) that cannot reproduce or grow on their own; they need a host cell.", 
+                philosophy: "**Defining Life**. Trying to define the minimum requirements for something to be considered 'alive' or 'conscious'.", 
+                code: "**Malware/Injection**. A piece of code (like a virus) that can't run by itself but forces a host program to execute its instructions.",
+                links: []},
+            { id: 40, icon: '🧭', title: "Finding Your Way (Magnetism)", 
+                science: "Earth acts like a giant magnet, creating a magnetic field that guides compasses and protects us from the sun's radiation.", 
+                philosophy: "**Inner Guidance**. The idea that we have an internal 'compass' (intuition or conscience) that helps guide our decisions.", 
+                code: "**Navigation System**. Code that takes a fixed starting point (magnetic north/GPS) and uses it to calculate a path or direction.",
+                links: []},
+            { id: 41, icon: '⚖️', title: "The Problem of Evil (Suffering)", 
+                science: "Evolutionarily, suffering (pain) is a signal that helps an organism survive by avoiding danger.", 
+                philosophy: "**Theodicy**. Why does suffering exist in a world that is supposedly good or well-designed?", 
+                code: "**Error Handling**. The unavoidable parts of a program that deal with unexpected failures (like a power outage or bad user input).",
+                links: []},
+            { id: 42, icon: '🌊', title: "Tides and the Moon (Gravitational Pull)", 
+                science: "The Moon's gravity pulls on the Earth's oceans, causing the predictable rising and falling of tides.", 
+                philosophy: "**Influence**. How the presence of something far away (the Moon) can still have a massive, rhythmic effect on our daily lives.", 
+                code: "**Scheduled Tasks (Cron Jobs)**. Code that runs automatically at a fixed, repeating time interval (like the tides).",
+                links: []},
+            { id: 43, icon: '💡', title: "The Power of Friction (Resistance)", 
+                science: "Friction is the force that resists motion when two surfaces touch. Without it, nothing could stop or grab on.", 
+                philosophy: "**The Necessity of Conflict**. Resistance and struggle are necessary for building strength and creating something meaningful.", 
+                code: "**Rate Limiting**. Code that restricts how often a user can do something to prevent the system from crashing (the 'friction' of the app).",
+                links: []},
+            { id: 44, icon: '🍏', title: "Ockham's Razor (Simplicity)", 
+                science: "When choosing between two explanations, the simpler one is usually the better one (fewer guesses needed).", 
+                philosophy: "**Parsimony**. The philosophical rule that states simplicity should be preferred over complexity.", 
+                code: "**Refactoring**. The process of making complicated, messy code simpler, easier to read, and less error-prone.",
+                links: []},
+            { id: 45, icon: '🌐', title: "Is the Earth Flat? (Model Thinking)", 
+                science: "The Earth is round! The flat-Earth model fails to predict things like ships disappearing over the horizon.", 
+                philosophy: "**The Importance of Testing Models**. We create mental models of the world, but we must be willing to change them when evidence proves them wrong.", 
+                code: "**Unit Testing**. Writing small pieces of code to specifically test if a particular function or part of the program works exactly as expected.",
+                links: []},
+            { id: 46, icon: '💬', title: "The Theory of Mind", 
+                science: "The ability to guess and understand what someone else is thinking or feeling, even if they don't say it.", 
+                philosophy: "**Empathy**. The capacity to understand or feel what another person is experiencing from within their frame of reference.", 
+                code: "**User Experience (UX) Design**. Planning an app by constantly thinking, 'What is the user thinking right now, and what do they need next?'",
+                links: []},
+            { id: 47, icon: '🌡️', title: "Why Heat Moves (Equilibrium)", 
+                science: "Heat always moves from hot objects to cold objects until everything reaches the same temperature (thermal equilibrium).", 
+                philosophy: "**Balance/Harmony**. The universe naturally tends toward a state of rest and balance, whether in physics or in life.", 
+                code: "**Load Balancing**. Distributing work evenly across multiple servers so no single server gets too hot (overloaded) and all systems run smoothly.",
+                links: []},
+            { id: 48, icon: '🔑', title: "Cryptography (Secrets)", 
+                science: "Using complex math to scramble a message so only the intended recipient can read it.", 
+                philosophy: "**Trust and Privacy**. The ethical debate over who should be allowed to keep secrets, and how secure those secrets should be.", 
+                code: "**Encryption Algorithms**. Using complex math functions to securely scramble and unscramble data so only authorized users can read it.",
+                links: []},
+            { id: 49, icon: '♾️', title: "Zeno's Paradox (Motion)", 
+                science: "To reach the end of a room, you must first reach the halfway point. To reach *that* point, you must reach *its* halfway point, and so on, forever. How do you ever start moving?", 
+                philosophy: "**The Illusion of Division**. The idea that reality might be continuous and smooth, not broken up into tiny, countable steps.", 
+                code: "**Asynchronous Operations**. Code that starts a long process (like crossing a room) and then moves on to other tasks without waiting for the first one to finish.",
+                links: []},
+            { id: 50, icon: '❓', title: "What is Truth?", 
+                science: "Truth is what is observed and verified by consistent evidence (the Scientific Method).", 
+                philosophy: "**Correspondence Theory**. The idea that a statement is true if it matches or 'corresponds' with reality.", 
+                code: "**Unit Tests (Assertions)**. A test that asserts (claims) that a variable is exactly equal to an expected 'truth' value.",
+                links: []},
+        ];
 
-        // --- INITIALIZATION AND AUTHENTICATION ---
+        let ARTIFACTS = []; // Local cache for artifacts
+
+        // --- AUTHENTICATION AND INITIALIZATION ---
         async function initializeFirebase() {
             try {
                 const app = initializeApp(firebaseConfig);
                 auth = getAuth(app);
                 db = getFirestore(app);
-                storage = getStorage(app); // Get Storage service
+                storage = getStorage(app); 
 
-                onAuthStateChanged(auth, async (user) => {
-                    if (user) {
-                        userId = user.uid;
-                        console.log("Firebase Auth Ready. User ID:", userId);
+                await new Promise((resolve) => {
+                    // Check for token first
+                    if (authToken) {
+                        signInWithCustomToken(auth, authToken).then(() => {
+                            userId = auth.currentUser.uid;
+                            resolve();
+                        }).catch((error) => {
+                            console.error("Custom token sign-in failed, falling back to anonymous:", error);
+                            signInAnonymously(auth).then(() => {
+                                userId = auth.currentUser.uid;
+                                resolve();
+                            });
+                        });
                     } else {
-                        // Sign in anonymously if no token is available
-                        await signInAnonymously(auth);
-                        userId = auth.currentUser.uid;
-                        console.log("Signed in anonymously. User ID:", userId);
+                        // If no token, sign in anonymously
+                        signInAnonymously(auth).then(() => {
+                            userId = auth.currentUser.uid;
+                            resolve();
+                        }).catch((error) => {
+                             console.error("Anonymous sign-in failed:", error);
+                             resolve(); // Resolve even on failure to continue app loading
+                        });
                     }
+                }).then(() => {
                     isAuthReady = true;
+                    console.log("Firebase Auth Ready. User ID:", userId || 'N/A');
+                    startArtifactsListener(); // Start listening for artifacts after auth
+                    renderLessonList(); // Render lessons after auth is ready
                 });
 
-                // Use the custom token if provided
-                if (authToken) {
-                    await signInWithCustomToken(auth, authToken);
-                }
             } catch (error) {
                 console.error("Error initializing Firebase:", error);
                 uploadMessage.textContent = 'Error: Failed to initialize Firebase services.';
@@ -382,10 +496,54 @@
             }
         }
 
-        // --- UPLOAD HANDLER ---
+        // --- TAB SWITCHING ---
+        function switchTab(targetTab) {
+            // Hide all tabs
+            tabLab.classList.add('hidden');
+            tabArtifacts.classList.add('hidden');
+
+            // Show target tab
+            document.getElementById(`tab-${targetTab}`).classList.remove('hidden');
+
+            // Update navigation styles
+            navTabs.querySelectorAll('button').forEach(btn => {
+                btn.classList.remove('tab-active');
+                btn.classList.add('text-gray-400', 'hover:text-white');
+            });
+            document.querySelector(`[data-tab="${targetTab}"]`).classList.add('tab-active');
+            document.querySelector(`[data-tab="${targetTab}"]`).classList.remove('text-gray-400', 'hover:text-white');
+        }
+
+        navTabs.addEventListener('click', (e) => {
+            if (e.target.dataset.tab) {
+                switchTab(e.target.dataset.tab);
+            }
+        });
+
+        // --- FIREBASE LISTENERS (ARTIFACTS) ---
+        function startArtifactsListener() {
+            if (!db || !userId) return;
+
+            // Public Collection Path: /artifacts/{appId}/public/data/assets
+            const publicArtifactsQuery = collection(db, `artifacts/${appId}/public/data/assets`);
+
+            onSnapshot(publicArtifactsQuery, (snapshot) => {
+                ARTIFACTS = [];
+                snapshot.forEach(doc => {
+                    ARTIFACTS.push(doc.data());
+                });
+                console.log("Artifacts updated:", ARTIFACTS.length);
+                renderArtifactsList(); // Update the vault list
+                updateLessonPanel(detailPanel.dataset.lessonId); // Update the currently viewed lesson's assets
+            }, (error) => {
+                console.error("Error listening to artifacts:", error);
+            });
+        }
+        
+        // --- UPLOAD HANDLER (Firebase Storage and Firestore) ---
         async function handleUpload() {
-            if (!isAuthReady) {
-                uploadMessage.textContent = 'Authentication is still setting up. Please wait.';
+            if (!isAuthReady || !storage || !db) {
+                uploadMessage.textContent = 'Application is not yet authenticated. Please wait a moment.';
                 uploadMessage.classList.add('text-yellow-500');
                 return;
             }
@@ -394,59 +552,158 @@
             if (!file) {
                 uploadMessage.textContent = 'Please select a file to upload.';
                 uploadMessage.classList.add('text-red-500');
-                uploadMessage.classList.remove('text-green-500');
                 return;
             }
 
-            uploadMessage.textContent = `Preparing to upload file: ${file.name}...`;
+            uploadMessage.textContent = `Uploading ${file.name}... Please wait.`;
             uploadMessage.classList.add('text-yellow-500');
-            uploadMessage.classList.remove('text-red-500', 'text-green-500');
 
-            // 1. Define the path in Storage
-            const storagePath = `artifacts/${appId}/public/assets/${file.name}`;
+            // 1. Storage Path
+            const safeFileName = file.name.replace(/[#$/\[\]]/g, '_'); // Replace characters prohibited in Storage paths
+            const storagePath = `artifacts/${appId}/public/assets/${safeFileName}`;
             const fileRef = ref(storage, storagePath);
-
-            // 2. Define the path in Firestore (to link the asset to the UI)
-            const assetCollectionRef = collection(db, `artifacts/${appId}/public/data/assets`);
-            const assetDocRef = doc(assetCollectionRef, file.name.replace(/\./g, '_')); // Use filename as doc ID, replace dots for safety
+            
+            // 2. Firestore Document ID (must be safe for doc id)
+            const docId = safeFileName.replace(/\./g, '-'); 
+            const assetDocRef = doc(db, `artifacts/${appId}/public/data/assets`, docId);
 
             try {
-                // NOTE: Full uploadBytes is commented out to prevent unexpected writes, 
-                // but the successful message below simulates the next step.
-                // await uploadBytes(fileRef, file);
-                
-                // Simulate saving the asset metadata to Firestore
+                // Upload to Firebase Storage
+                await uploadBytes(fileRef, file);
+                const downloadURL = await getDownloadURL(fileRef);
+
+                // Save metadata to Firestore
                 await setDoc(assetDocRef, {
+                    id: docId,
                     fileName: file.name,
+                    safeFileName: safeFileName,
                     storagePath: storagePath,
+                    downloadURL: downloadURL,
                     uploadedBy: userId,
                     timestamp: new Date().toISOString(),
                     size: file.size,
                     mimeType: file.type
                 });
 
-                console.log(`File metadata saved to Firestore at: ${assetDocRef.path}`);
-                console.log(`Simulation complete: File ${file.name} ready for Storage at ${storagePath}`);
-                
-                // Show success message
-                uploadMessage.textContent = `✅ Successfully prepared file for upload: ${file.name}. (Storage simulated: Check console for path).`;
+                uploadMessage.textContent = `✅ Success! File ${file.name} uploaded and saved to the Vault.`;
                 uploadMessage.classList.add('text-green-500');
-                uploadMessage.classList.remove('text-red-500', 'text-yellow-500');
+                assetFile.value = ''; // Clear file input
 
             } catch (error) {
                 console.error("Error during upload process:", error);
-                uploadMessage.textContent = `Error: Could not process file ${file.name}. ${error.message}`;
+                uploadMessage.textContent = `Error: Could not upload file ${file.name}. ${error.message}`;
                 uploadMessage.classList.add('text-red-500');
-                uploadMessage.classList.remove('text-green-500', 'text-yellow-500');
             }
         }
 
+        // --- RENDERING FUNCTIONS ---
+        
+        // Renders the list of all 50 lessons on the left side
+        function renderLessonList() {
+            topicGrid.innerHTML = LESSONS.map(lesson => `
+                <div class="container-card p-4 rounded-xl shadow-xl lesson-summary hover:bg-[#21262d] transition duration-150" 
+                    data-lesson-id="${lesson.id}"
+                    onclick="window.selectLesson(${lesson.id})"
+                >
+                    <span class="lesson-icon">${lesson.icon}</span> 
+                    ${lesson.id}. ${lesson.title}
+                </div>
+            `).join('');
+
+            // Select the first lesson by default for initial interactivity
+            if (LESSONS.length > 0) {
+                selectLesson(LESSONS[0].id);
+            }
+        }
+
+        // Updates the right detail panel when a lesson is clicked
+        window.selectLesson = (id) => {
+            const lesson = LESSONS.find(l => l.id == id);
+            if (!lesson) return;
+
+            // Set the panel's current lesson ID
+            detailPanel.dataset.lessonId = id;
+
+            // Update Text
+            panelTitle.textContent = `${lesson.icon} ${lesson.title}`;
+            
+            panelScience.classList.remove('hidden');
+            document.getElementById('science-text').innerHTML = lesson.science;
+            
+            panelPhilosophy.classList.remove('hidden');
+            document.getElementById('philosophy-text').innerHTML = lesson.philosophy;
+            
+            panelCode.classList.remove('hidden');
+            document.getElementById('code-text').innerHTML = lesson.code;
+
+            // Update Links
+            linksList.innerHTML = lesson.links && lesson.links.length > 0 
+                ? lesson.links.map(link => `<li><a href="${link.url}" target="_blank" class="text-blue-400 hover:text-blue-300 underline">${link.title}</a></li>`).join('')
+                : '<li class="text-gray-400">No external video or research links for this topic.</li>';
+            document.getElementById('panel-links').classList.remove('hidden');
+
+            // Update Assets (Artifacts)
+            updateLessonPanel(id);
+        }
+
+        // Updates the Artifacts section in the Lesson Panel
+        function updateLessonPanel(lessonId) {
+            const currentLesson = LESSONS.find(l => l.id == lessonId);
+            if (!currentLesson) return;
+
+            // This is a placeholder for filtering. Ideally, artifacts would have a 'lessonId' tag.
+            // For now, we will show ALL artifacts as shared class resources.
+            
+            if (ARTIFACTS.length > 0) {
+                assetsList.innerHTML = ARTIFACTS.map(artifact => `
+                    <li>
+                        <a href="${artifact.downloadURL}" target="_blank" class="text-teal-400 hover:text-teal-300 underline flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5-5 2.5V4zm6 10a1 1 0 100-2 1 1 0 000 2z" />
+                            </svg>
+                            ${artifact.fileName} <span class="text-xs text-gray-500 ml-2">(${artifact.uploadedBy.substring(0, 4)})</span>
+                        </a>
+                    </li>
+                `).join('');
+            } else {
+                assetsList.innerHTML = '<li class="text-gray-400">No shared artifacts for this topic yet.</li>';
+            }
+            document.getElementById('panel-assets').classList.remove('hidden');
+        }
+
+        // Renders the list of all uploaded artifacts in the Vault tab
+        function renderArtifactsList() {
+             if (ARTIFACTS.length === 0) {
+                sharedArtifactsList.innerHTML = '<li class="text-gray-400">No artifacts have been uploaded yet. Be the first to share a research paper or diagram!</li>';
+                return;
+            }
+
+            sharedArtifactsList.innerHTML = ARTIFACTS.map(artifact => `
+                <li class="p-3 bg-[#30363d] rounded-lg flex justify-between items-center">
+                    <div class="truncate">
+                        <a href="${artifact.downloadURL}" target="_blank" class="text-violet-300 hover:text-violet-200 font-semibold underline">
+                            ${artifact.fileName}
+                        </a>
+                        <p class="text-xs text-gray-400">
+                            Uploaded by: <span class="text-xs text-teal-400">${artifact.uploadedBy}</span>
+                            on ${new Date(artifact.timestamp).toLocaleDateString()}
+                        </p>
+                    </div>
+                    <a href="${artifact.downloadURL}" target="_blank" class="text-teal-400 hover:text-teal-300 flex-shrink-0 ml-4">
+                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                            <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                        </svg>
+                    </a>
+                </li>
+            `).join('');
+        }
+        
         // --- EVENT LISTENERS ---
         uploadButton.addEventListener('click', handleUpload);
 
-        // Start the application
+        // --- START APPLICATION ---
         initializeFirebase();
-
     </script>
 </body>
 </html>
