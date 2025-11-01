@@ -10,6 +10,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s;
         }
         /* Custom scrollbar for visual appeal in dark theme */
         ::-webkit-scrollbar {
@@ -41,6 +42,7 @@
                         'card-dark': '#1e293b', // Slate-800
                         'primary': '#818cf8', // Indigo-400 (Vibrant Accent)
                         'secondary-text': '#e2e8f0', // Slate-200
+                        'tab-active-bg': '#334155', // Slate-700 for active tab
                     }
                 }
             }
@@ -50,61 +52,91 @@
 <body class="min-h-screen bg-background-dark text-secondary-text">
 
     <div id="app" class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
-        <header class="text-center mb-12 pt-4">
-            <h1 class="text-5xl sm:text-6xl font-extrabold text-white">
-                <span class="text-primary">⚛️ HSI Labs:</span> Essential Topics
+        <header class="pt-4 mb-6">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-white mb-2">
+                <span class="text-primary">⚛️ HSI Labs</span>
             </h1>
-            <p class="mt-4 text-xl text-primary font-medium max-w-3xl mx-auto">
-                Foundations of Science and Philosophy (General Level)
-            </p>
+            
+            <!-- Tab Navigation (The new division structure) -->
+            <nav class="border-b border-slate-700 mt-4">
+                <div class="flex space-x-4">
+                    <button id="tab-topics" data-target="lab-topics" class="tab-button px-6 py-2 text-lg font-semibold border-b-2 border-primary text-primary transition duration-200 bg-tab-active-bg rounded-t-lg shadow-inner">
+                        The Lab (Learn Fun Topics)
+                    </button>
+                    <button id="tab-submission" data-target="submission-hub" class="tab-button px-6 py-2 text-lg font-semibold border-b-2 border-transparent text-slate-400 hover:text-white hover:border-slate-500 transition duration-200">
+                        Project Submission Hub
+                    </button>
+                </div>
+            </nav>
         </header>
 
-        <!-- --- PROJECT SUBMISSION HUB (SEPARATE UPLOAD PART) --- -->
-        <section class="mb-12 p-8 bg-card-dark rounded-xl shadow-2xl border border-primary/30 fade-in">
-            <h2 class="text-3xl font-bold text-white mb-4 flex items-center justify-center sm:justify-start">
-                💾 Project Submission Hub
+        <!-- --- 1. LAB TOPICS SECTION --- -->
+        <div id="lab-topics" class="tab-content">
+            <h2 class="text-3xl font-bold text-white mt-8 mb-6">
+                The Lab: Foundations of Science and Philosophy
             </h2>
-            <p class="text-slate-400 mb-6 max-w-xl">
-                Use this section to securely submit your completed lab reports, project outlines, or data files for review.
+            <p class="text-slate-400 mb-6 max-w-4xl">
+                Dive into awesome topics! We'll explore big scientific facts and the cool philosophical questions that come with them. Think like a scientist and a philosopher at the same time!
             </p>
-            <div class="flex flex-col sm:flex-row gap-4">
-                <input type="text" placeholder="Enter Project Name (e.g., 'Calorimetry Report')"
-                       class="flex-grow px-5 py-3 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:ring-primary focus:border-primary transition duration-150 ease-in-out">
-                <button onclick="simulateUpload()"
-                        class="sm:w-auto w-full px-6 py-3 bg-primary text-slate-900 font-bold rounded-lg hover:bg-indigo-300 transition duration-200 shadow-lg hover:shadow-primary/50 transform hover:scale-[1.02]">
-                    Upload File (Simulated)
-                </button>
+
+            <!-- Search and Filter Controls -->
+            <div class="bg-card-dark p-6 rounded-xl shadow-xl mb-8 border border-slate-700 sticky top-0 z-10">
+                <input type="text" id="search-input" placeholder="Search topics (e.g., 'density', 'titration', 'gas')"
+                       class="w-full px-5 py-3 bg-slate-900 border border-slate-700 rounded-lg focus:ring-primary focus:border-primary text-secondary-text placeholder-slate-500 text-lg transition duration-150 ease-in-out shadow-sm">
+
+                <div class="mt-4 flex flex-wrap gap-3 justify-center" id="category-filters">
+                    <!-- Filter buttons will be injected here by JavaScript -->
+                </div>
             </div>
-        </section>
+
+            <!-- Topic Grid -->
+            <div id="topics-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Topic cards will be injected here by JavaScript -->
+            </div>
+
+            <!-- No Results Message -->
+            <div id="no-results" class="text-center py-12 text-slate-500 hidden bg-card-dark rounded-xl shadow-lg mt-8">
+                <svg class="mx-auto h-12 w-12 text-slate-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <h3 class="mt-2 text-xl font-medium">No Labs Found</h3>
+                <p class="mt-1 text-base">Try adjusting your search or clearing the category filter.</p>
+            </div>
+        </div>
         <!-- --------------------------------------------------- -->
 
-        <!-- Search and Filter Controls -->
-        <div class="bg-card-dark p-6 rounded-xl shadow-xl mb-8 border border-slate-700 sticky top-0 z-10">
-            <input type="text" id="search-input" placeholder="Search topics (e.g., 'density', 'titration', 'gas')"
-                   class="w-full px-5 py-3 bg-slate-900 border border-slate-700 rounded-lg focus:ring-primary focus:border-primary text-secondary-text placeholder-slate-500 text-lg transition duration-150 ease-in-out shadow-sm">
 
-            <div class="mt-4 flex flex-wrap gap-3 justify-center" id="category-filters">
-                <!-- Filter buttons will be injected here by JavaScript -->
+        <!-- --- 2. SUBMISSION HUB SECTION --- -->
+        <div id="submission-hub" class="tab-content hidden fade-in">
+            <h2 class="text-3xl font-bold text-white mt-8 mb-4">
+                📁 Project Submission Hub
+            </h2>
+            <p class="text-slate-400 mb-8 max-w-xl">
+                Please upload your final work here. Ensure your file is named clearly, including your name and the lab title.
+            </p>
+            <div class="p-8 bg-card-dark rounded-xl shadow-2xl border border-primary/30">
+                <h3 class="text-2xl text-primary font-semibold mb-4">Upload File</h3>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <input type="text" id="project-name-input" placeholder="Enter Project Name (e.g., 'John Smith - Calorimetry Report')"
+                           class="flex-grow px-5 py-3 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:ring-primary focus:border-primary transition duration-150 ease-in-out">
+                    <input type="file" id="file-selector" class="hidden">
+                    <button onclick="document.getElementById('file-selector').click()"
+                            class="sm:w-auto w-full px-6 py-3 bg-slate-700 text-white font-bold rounded-lg hover:bg-slate-600 transition duration-200 shadow-md transform hover:scale-[1.01]">
+                        Choose File
+                    </button>
+                    <button onclick="simulateUpload()"
+                            class="sm:w-auto w-full px-6 py-3 bg-primary text-slate-900 font-bold rounded-lg hover:bg-indigo-300 transition duration-200 shadow-lg hover:shadow-primary/50 transform hover:scale-[1.02]">
+                        Submit Project
+                    </button>
+                </div>
+                <div id="selected-file-name" class="mt-4 text-sm text-slate-500">No file selected.</div>
             </div>
         </div>
-
-        <!-- Topic Grid -->
-        <div id="topics-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Topic cards will be injected here by JavaScript -->
-        </div>
+        <!-- --------------------------------------------------- -->
 
         <!-- Notification Message Box (Custom Alert) -->
         <div id="message-box" class="fixed top-4 right-4 bg-green-500 text-white p-4 rounded-lg shadow-xl hidden z-50 fade-in" role="alert">
             <p id="message-text" class="font-semibold"></p>
-        </div>
-
-        <!-- No Results Message -->
-        <div id="no-results" class="text-center py-12 text-slate-500 hidden bg-card-dark rounded-xl shadow-lg mt-8">
-            <svg class="mx-auto h-12 w-12 text-slate-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <h3 class="mt-2 text-xl font-medium">No Labs Found</h3>
-            <p class="mt-1 text-base">Try adjusting your search or clearing the category filter.</p>
         </div>
     </div>
 
@@ -186,8 +218,14 @@
         function showNotification(message, isError = false) {
             messageText.textContent = message;
             messageBox.classList.remove('hidden');
-            messageBox.classList.remove(isError ? 'bg-green-500' : 'bg-red-500');
-            messageBox.classList.add(isError ? 'bg-red-500' : 'bg-green-500');
+            
+            // Reset and apply correct color/shadow
+            messageBox.classList.remove('bg-green-500', 'bg-red-500', 'shadow-green-700/50', 'shadow-red-700/50');
+            if (isError) {
+                messageBox.classList.add('bg-red-500', 'shadow-red-700/50');
+            } else {
+                messageBox.classList.add('bg-green-500', 'shadow-green-700/50');
+            }
 
             setTimeout(() => {
                 messageBox.classList.add('hidden');
@@ -195,25 +233,62 @@
         }
 
         function viewLesson(title) {
+            // Simulate navigation to a detailed lesson page
             showNotification(`Opening lesson for "${title}"... (Simulated Link Action)`);
         }
 
         function simulateUpload() {
-            const projectNameInput = document.querySelector('input[placeholder="Enter Project Name (e.g., \'Calorimetry Report\')"]');
+            const projectNameInput = document.getElementById('project-name-input');
+            const fileNameDisplay = document.getElementById('selected-file-name');
             const projectName = projectNameInput.value.trim();
+            const fileName = fileNameDisplay.textContent.replace('File selected: ', '');
 
-            if (projectName.length > 5) {
-                showNotification(`Project "${projectName}" submitted successfully! Thank you for your work.`, false);
-                projectNameInput.value = ''; // Clear input on success
-            } else {
-                showNotification(`Please enter a descriptive project name (min 6 characters) before submitting.`, true);
+            if (projectName.length < 5) {
+                showNotification(`Please enter a descriptive Project Name (min 5 characters).`, true);
+                return;
+            }
+
+            if (fileName === 'No file selected.') {
+                showNotification(`Please select a file to submit.`, true);
+                return;
+            }
+
+            showNotification(`Submission confirmed! Project: "${projectName}" with file: "${fileName}".`, false);
+            
+            // Reset inputs after simulated submission
+            projectNameInput.value = '';
+            fileNameDisplay.textContent = 'No file selected.';
+            document.getElementById('file-selector').value = '';
+        }
+
+        function switchTab(targetId) {
+            // 1. Hide all content sections
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+
+            // 2. Show the target section
+            document.getElementById(targetId).classList.remove('hidden');
+
+            // 3. Update active tab styles
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('border-primary', 'text-primary', 'bg-tab-active-bg', 'shadow-inner');
+                button.classList.add('border-transparent', 'text-slate-400', 'hover:text-white', 'hover:border-slate-500');
+            });
+
+            // 4. Set active tab style
+            const activeTab = document.querySelector(`.tab-button[data-target="${targetId}"]`);
+            if (activeTab) {
+                activeTab.classList.add('border-primary', 'text-primary', 'bg-tab-active-bg', 'shadow-inner');
+                activeTab.classList.remove('border-transparent', 'text-slate-400', 'hover:text-white', 'hover:border-slate-500');
             }
         }
-        // --- CORE RENDERING FUNCTIONS ---
+
+
+        // --- CORE RENDERING FUNCTIONS (UNCHANGED) ---
 
         /**
          * Renders the filtered list of topics onto the grid.
-         * @param {Array} topicsToRender - The array of topics to display.
          */
         function renderTopics(topicsToRender) {
             topicsGrid.innerHTML = '';
@@ -227,10 +302,8 @@
 
             topicsToRender.forEach((topic, index) => {
                 const card = document.createElement('div');
-                // Updated class for dark theme and highly interactive design
                 card.className = 'bg-card-dark p-6 rounded-xl shadow-lg transition duration-300 transform hover:scale-[1.03] hover:shadow-primary/50 border-t-4 border-primary/50 card-animate cursor-pointer';
                 
-                // Add a slight stagger delay for better visual effect on load/filter
                 card.style.animationDelay = `${index * 50}ms`;
 
                 card.innerHTML = `
@@ -245,7 +318,6 @@
                         </button>
                     </div>
                 `;
-                // Add a click handler to the card itself for extra interactivity
                 card.onclick = () => viewLesson(topic.title);
                 topicsGrid.appendChild(card);
             });
@@ -275,8 +347,8 @@
          * Generates the category filter buttons.
          */
         function setupFilters() {
-            // Get unique categories and add 'All'
             const categories = ['All', ...new Set(labTopics.map(t => t.category))];
+            filtersContainer.innerHTML = ''; // Clear existing buttons
             
             categories.forEach(category => {
                 const button = document.createElement('button');
@@ -285,27 +357,21 @@
                 button.dataset.category = category;
 
                 button.addEventListener('click', () => {
-                    // Update filter state
                     currentFilter = category;
-                    // Reset search term when a category is selected (optional, but cleaner UX)
                     searchInput.value = '';
                     searchTerm = '';
                     
-                    // Update button active state
                     document.querySelectorAll('#category-filters button').forEach(btn => {
-                        // Inactive state for dark theme
                         btn.classList.remove('bg-primary', 'text-slate-900', 'shadow-md');
                         btn.classList.add('bg-slate-700', 'text-slate-200', 'hover:bg-slate-600');
                     });
-                    // Active state for dark theme
+                    
                     button.classList.add('bg-primary', 'text-slate-900', 'shadow-md');
                     button.classList.remove('bg-slate-700', 'text-slate-200', 'hover:bg-slate-600');
 
-                    // Update the displayed cards
                     updateDisplay();
                 });
 
-                // Set initial styles (All is active by default)
                 if (category === 'All') {
                     button.classList.add('bg-primary', 'text-slate-900', 'shadow-md');
                 } else {
@@ -320,19 +386,43 @@
          * Initialization function called on window load.
          */
         window.onload = function() {
-            // 1. Setup event listeners
+            // 1. Setup tab switching
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    switchTab(e.target.dataset.target);
+                });
+            });
+
+            // 2. Setup file input handler
+            document.getElementById('file-selector').addEventListener('change', (e) => {
+                const fileNameDisplay = document.getElementById('selected-file-name');
+                if (e.target.files.length > 0) {
+                    fileNameDisplay.textContent = `File selected: ${e.target.files[0].name}`;
+                    fileNameDisplay.classList.remove('text-slate-500');
+                    fileNameDisplay.classList.add('text-primary');
+                } else {
+                    fileNameDisplay.textContent = 'No file selected.';
+                    fileNameDisplay.classList.remove('text-primary');
+                    fileNameDisplay.classList.add('text-slate-500');
+                }
+            });
+
+            // 3. Setup search listener
             searchInput.addEventListener('input', (e) => {
                 searchTerm = e.target.value;
-                // Ensure 'All' filter is selected when user starts searching
+                // Force switch to 'All' filter on search
                 currentFilter = 'All';
                 document.querySelector('[data-category="All"]').click(); 
             });
 
-            // 2. Build the category filters
+            // 4. Build the category filters
             setupFilters();
 
-            // 3. Initial render of all topics
+            // 5. Initial render of all topics
             updateDisplay();
+
+            // 6. Ensure the default tab is active on load
+            switchTab('lab-topics');
         };
     </script>
 </body>
